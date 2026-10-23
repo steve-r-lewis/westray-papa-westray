@@ -23,8 +23,8 @@ jobs:
   app:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # Node 22 from the image; pnpm at the version package.json pins. Corepack
-    # cannot run pnpm 12, so npm installs it.
+    # Node 22 from the image; pnpm through corepack at the version package.json
+    # pins. The image's corepack (0.34) predates pnpm 11+, so a newer one is installed.
     container: node:22-bookworm
     services:
       postgres:
@@ -40,13 +40,15 @@ jobs:
           --health-retries 10
     env:
       DATABASE_URL: postgres://westray:westray@postgres:5432/westray
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: Install
         run: |
-          npm install --global "$(node -p 'require("./package.json").packageManager')"
+          npm install --global corepack@0.36.0
+          corepack enable
           pnpm install --frozen-lockfile
       - name: Type check
         run: pnpm typecheck
