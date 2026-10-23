@@ -48,10 +48,11 @@ Everything a visitor reads is data: text, menus, themes and settings come from t
 | Locally | Nuxt 4, pnpm and PostgreSQL 16 |
 | Live | Vercel, with Supabase as plain PostgreSQL, both in the UK |
 
-Needs Node 22.18 or later, pnpm 12 and Docker for the local database. pnpm refuses packages published less than a day ago (`minimumReleaseAge` in `pnpm-workspace.yaml`), so the lockfile never holds one.
+Needs Node 22.18 or later, corepack 0.35 or later and Docker for the local database. Corepack runs the pnpm version that `package.json` pins (12.5.1, checked against its hash). The corepack bundled with Node 22 is 0.34, which cannot run pnpm 11 or later, so install a newer one first. pnpm refuses packages published less than a day ago (`minimumReleaseAge` in `pnpm-workspace.yaml`), so the lockfile never holds one.
 
 ```sh
-npm install --global pnpm@12   # once; corepack cannot run pnpm 12
+npm install --global corepack@0.36.0   # once; Node's bundled corepack is too old
+corepack enable
 pnpm install
 cp .env.example .env
 pnpm db:up        # PostgreSQL 16 in a container
