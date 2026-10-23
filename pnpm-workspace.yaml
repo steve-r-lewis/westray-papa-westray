@@ -1,3 +1,8 @@
-onlyBuiltDependencies:
-  - esbuild
-  - '@parcel/watcher'
+# Packages allowed to run install scripts.
+allowBuilds:
+  esbuild: true
+  '@parcel/watcher': true
+
+# Refuse packages published less than a day ago (pnpm 12's default, stated here so
+# every pnpm version that reads this file resolves the lockfile the same way).
+minimumReleaseAge: 1440
