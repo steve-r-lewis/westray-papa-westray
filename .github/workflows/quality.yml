@@ -20,10 +20,46 @@ jobs:
       - name: Check Markdown headings and local links
         run: python3 scripts/check_markdown.py
 
+  app:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Node 22 from the image; pnpm from corepack at the version package.json pins.
+    container: node:22-bookworm
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: westray
+          POSTGRES_PASSWORD: westray
+          POSTGRES_DB: westray
+        options: >-
+          --health-cmd "pg_isready -U westray -d westray"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgres://westray:westray@postgres:5432/westray
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
+      - name: Type check
+        run: pnpm typecheck
+      - name: Test
+        run: pnpm test
+      - name: Migrate
+        run: pnpm db:migrate
+      - name: Build
+        run: pnpm build
+
   # Gate for the `quality` status check that the master ruleset requires of
   # every repository. It passes only when every check above has passed.
   quality:
-    needs: [markdown]
+    needs: [markdown, app]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
