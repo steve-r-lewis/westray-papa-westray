@@ -1,4 +1,4 @@
-# Westray
+# Westray-Papa-Westray
 
 > **AI-Driven Development**
 >
@@ -27,9 +27,9 @@ Pages whose slice is not built yet say "coming soon"; nothing is mocked.
 
 ## How it is built
 
-Westray draws every screen itself and composes headless `nuxt4-layers` capabilities, pinned by tag ([ADR-0009](https://github.com/nuxt4-layers/platform-architecture/blob/b3ef6dd53faa097d7a6b509ec714ea7e447b3051/docs/decisions/ADR-0009-headless-capability-layers.md)).
+Westray-Papa-Westray draws every screen itself and composes headless `nuxt4-layers` capabilities, pinned by tag ([ADR-0009](https://github.com/nuxt4-layers/platform-architecture/blob/b3ef6dd53faa097d7a6b509ec714ea7e447b3051/docs/decisions/ADR-0009-headless-capability-layers.md)).
 
-| Capability | Gives Westray |
+| Capability | Gives Westray-Papa-Westray |
 |---|---|
 | [`authentication`](https://github.com/nuxt4-layers/authentication) | Sign-in, sessions, step-up |
 | [`identity`](https://github.com/nuxt4-layers/identity) | Accounts, groups and memberships |
