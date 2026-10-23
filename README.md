@@ -8,7 +8,7 @@
 
 ## Status
 
-**Design agreed; no code yet.** Slice 1 is next. See the [design](docs/design.md).
+**Slice 1a built:** the application shell (header, side menu and footer, laid out after the `westray.uk` mock-up), with every label and link read from [`data/shell.json`](data/shell.json), and the migration runner. Every page beyond the home page says "coming soon". See the [design](docs/design.md).
 
 ## What it offers
 
@@ -48,7 +48,35 @@ Everything a visitor reads is data: text, menus, themes and settings come from t
 | Locally | Nuxt 4, pnpm and PostgreSQL 16 |
 | Live | Vercel, with Supabase as plain PostgreSQL, both in the UK |
 
-Set-up commands arrive with slice 1.
+Needs Node 22.18 or later, pnpm (through `corepack enable`) and Docker for the local database.
+
+```sh
+corepack enable
+pnpm install
+cp .env.example .env
+pnpm db:up        # PostgreSQL 16 in a container
+pnpm db:migrate   # apply pending migrations
+pnpm dev          # http://localhost:3000
+```
+
+| Command | Does |
+|---|---|
+| `pnpm typecheck` | Type-checks the app, server, tests and scripts |
+| `pnpm test` | Unit and component tests; the migration tests run when `DATABASE_URL` is set |
+| `pnpm build` | Production build |
+| `pnpm db:down` | Stops the local database, keeping its data |
+
+Migration rules are in [the migrations folder](server/database/migrations/README.md).
+
+## Where things are
+
+| Path | Holds |
+|---|---|
+| `data/shell.json` | Site name, labels, menus, footer, home page text and the pages still to come. Configuration and Publisher replace it in slice 1b |
+| `shared/shell.ts` | The schema that data must meet |
+| `app/` | Layout, components and pages |
+| `server/api/shell.get.ts` | Serves the shell data through a port that slice 1b re-points |
+| `server/database/` | Migration runner and migrations |
 
 ## Documents
 

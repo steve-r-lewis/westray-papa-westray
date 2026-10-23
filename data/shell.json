@@ -1,0 +1,120 @@
+{
+  "site": {
+    "name": "Westray Online",
+    "tagline": "Two Islands, One Community, Many Voices",
+    "nameLines": ["Westray and", "Papa Westray"],
+    "locale": "en-GB",
+    "logo": { "src": "/images/logo.png", "alt": "" }
+  },
+  "labels": {
+    "skipToContent": "Skip to content",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "siteMenu": "Site menu",
+    "primaryNavigation": "Main",
+    "footerNavigation": "Footer",
+    "share": "Share",
+    "linkCopied": "Link copied",
+    "comingSoonTitle": "Coming soon",
+    "comingSoonBody": "This part of the site is not built yet. It will appear here when it is ready.",
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "There is no page at this address.",
+    "errorTitle": "Something went wrong",
+    "errorBody": "The page could not be shown. Please try again later.",
+    "backHome": "Back to the home page"
+  },
+  "header": {
+    "links": [
+      { "label": "Home", "to": "/" },
+      { "label": "Marketplace", "to": "/market" },
+      { "label": "Shopping", "to": "/shop" },
+      { "label": "Events", "to": "/events" }
+    ],
+    "signIn": { "label": "Sign in", "to": "/sign-in" }
+  },
+  "menu": {
+    "groups": [
+      {
+        "label": "Information",
+        "items": [
+          { "label": "Home", "to": "/" },
+          { "label": "About", "to": "/about" },
+          { "label": "Policies", "to": "/policies" },
+          { "label": "Contact", "to": "/contact" }
+        ]
+      },
+      {
+        "label": "News",
+        "items": [
+          { "label": "Articles", "to": "/articles" },
+          { "label": "Blog", "to": "/blog" }
+        ]
+      },
+      {
+        "label": "What's on",
+        "items": [
+          { "label": "Events", "to": "/events" },
+          { "label": "Workshops", "to": "/workshops" },
+          { "label": "Creative Trail", "to": "/creative-trail" }
+        ]
+      },
+      {
+        "label": "Community",
+        "items": [
+          { "label": "Clubs", "to": "/clubs" },
+          { "label": "Committees", "to": "/committees" },
+          { "label": "Organisations", "to": "/organisations" },
+          { "label": "Businesses", "to": "/businesses" }
+        ]
+      },
+      {
+        "label": "Market",
+        "items": [
+          { "label": "Market", "to": "/market" },
+          { "label": "Shop", "to": "/shop" }
+        ]
+      }
+    ],
+    "footer": [
+      {
+        "label": "Buy me a Coffee",
+        "description": "Help me keep this site alive",
+        "to": "https://buymeacoffee.com/stevelewis"
+      }
+    ]
+  },
+  "footer": {
+    "copyright": "© 2025–2026 Westray Online. All rights reserved.",
+    "links": [
+      { "label": "About", "to": "/about" },
+      { "label": "Contact", "to": "/contact" },
+      { "label": "Policies", "to": "/policies" }
+    ]
+  },
+  "home": {
+    "title": "Home",
+    "heading": "Welcome to Westray's Digital Commons",
+    "intro": "Shop local, connect with neighbours, and keep the community spirit alive.",
+    "actions": [
+      { "label": "Join the Marketplace", "to": "/market" },
+      { "label": "See Community Events", "to": "/events" }
+    ]
+  },
+  "comingSoon": [
+    { "path": "/about", "title": "About" },
+    { "path": "/policies", "title": "Policies" },
+    { "path": "/contact", "title": "Contact" },
+    { "path": "/articles", "title": "Articles" },
+    { "path": "/blog", "title": "Blog" },
+    { "path": "/events", "title": "Events" },
+    { "path": "/workshops", "title": "Workshops" },
+    { "path": "/creative-trail", "title": "Creative Trail" },
+    { "path": "/clubs", "title": "Clubs" },
+    { "path": "/committees", "title": "Committees" },
+    { "path": "/organisations", "title": "Organisations" },
+    { "path": "/businesses", "title": "Businesses" },
+    { "path": "/market", "title": "Market" },
+    { "path": "/shop", "title": "Shop" },
+    { "path": "/sign-in", "title": "Sign in" }
+  ]
+}
