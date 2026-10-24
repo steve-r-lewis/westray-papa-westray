@@ -13,14 +13,17 @@ Each block of work is done in its own new chat, started from a handover prompt. 
 | No PR watching | Never subscribe to or watch PRs; if a subscription appears, unsubscribe |
 | The local copy is a test environment | Development happens on GitHub. `scripts/provision.ps1` overwrites `.env` from `.env.example`, so settings belong in `.env.example`, never in `.env` |
 | Layers pinned to release commits | Every `nuxt4-layers` capability is pinned to its release tag's commit, never a branch |
+| Lean checks in chat | A chat runs only the type check, unit tests and Markdown check, then pushes. CI and the owner's `./scripts/provision.ps1 -Check` run the database and end-to-end suites; the owner pastes back only the failures |
+| Read before building | A handover names the existing code and layer docs to reuse (other repositories included), and a chat reads them before writing anything new |
 
 ### Handover prompt
 
 ```text
 In steve-r-lewis/westray-papa-westray, <outcome, in one or two sentences>.
-Read docs/plan.md, README.md and docs/design.md first, then <other files>.
-Checks: pnpm typecheck, pnpm test (with DATABASE_URL set), pnpm build,
-python3 scripts/check_markdown.py, pnpm install --frozen-lockfile.
+Read docs/plan.md, README.md and docs/design.md first, then <existing code and
+layer docs to reuse, in this or other repositories>.
+Checks in this chat: pnpm typecheck, pnpm test (without DATABASE_URL),
+python3 scripts/check_markdown.py. CI and the owner run the rest.
 Update docs/plan.md in the same PR. One draft PR.
 Report back with <the PR link only | the PR link and one line on …>.
 ```
