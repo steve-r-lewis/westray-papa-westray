@@ -1,6 +1,6 @@
 # Westray-Papa-Westray: Plan
 
-> **In short:** the working plan. Every new chat reads this first. It says how we work, what is done, what is in progress and what comes next. It is kept short and current, never a history: the [README](../README.md) says what the site is and how to run it, and the [design](design.md) says why it is built as it is.
+> **In short:** the working plan. New to the code? Read [Architecture in plain English](architecture.md) first. Every new chat reads this first. It says how we work, what is done, what is in progress and what comes next. It is kept short and current, never a history: the [README](../README.md) says what the site is and how to run it, and the [design](design.md) says why it is built as it is.
 
 ## How we work
 
@@ -32,6 +32,7 @@ Report back with <the PR link only | the PR link and one line on …>.
 
 Newest first.
 
+- Architecture in plain English, describing what exists before the design discussion: this PR
 - Slice 1c part 2, the members' area: members' notices for signed-in members, nothing for anyone signed out; the canary leak tests for a signed-in member with no roles. Editing moves to content-editor: this PR
 - Slice 1c part 1, accounts: Authentication, Identity, Profile and Authorisation composed with iam-integration's adapters; sign-in, account, security and own profile pages; the platform super admin in Identity; access rules asking Authorisation: [steve-r-lewis/westray-papa-westray#17](https://github.com/steve-r-lewis/westray-papa-westray/pull/17)
 - Theme Manager `v0.2.2` pinned here: [steve-r-lewis/westray-papa-westray#15](https://github.com/steve-r-lewis/westray-papa-westray/pull/15)
