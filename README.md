@@ -108,7 +108,7 @@ It holds one setting:
 
 | Variable | Default | Meaning |
 |---|---|---|
-| `DATABASE_URL` | `postgres://westray:westray@localhost:5432/westray` | The PostgreSQL database the migrations run against. The default matches the container in `compose.yaml` |
+| `DATABASE_URL` | `postgres://westray-papa-westray:westray-papa-westray@localhost:5432/westray-papa-westray` | The PostgreSQL database the migrations run against. The default matches the container in `compose.yaml` |
 
 To use a PostgreSQL 16 you already run instead of Docker, create a database and a user for it, and point `DATABASE_URL` at them. Then skip `pnpm db:up` below.
 
@@ -141,13 +141,13 @@ pnpm build       # production build into .output/
 
 ```powershell
 # Windows (PowerShell)
-$env:DATABASE_URL = "postgres://westray:westray@localhost:5432/westray"
+$env:DATABASE_URL = "postgres://westray-papa-westray:westray-papa-westray@localhost:5432/westray-papa-westray"
 pnpm test
 ```
 
 ```sh
 # macOS or Linux
-DATABASE_URL=postgres://westray:westray@localhost:5432/westray pnpm test
+DATABASE_URL=postgres://westray-papa-westray:westray-papa-westray@localhost:5432/westray-papa-westray pnpm test
 ```
 
 All tests should pass. CI runs these same checks on every pull request.
@@ -177,6 +177,7 @@ All tests should pass. CI runs these same checks on every pull request.
 | `Command "nuxt" not found` or `Command "dev" not found` | Your `package.json` is not the repository's, often after an editor's project wizard rewrote it. Check with `git status`, restore it with `git restore package.json pnpm-lock.yaml`, then run `pnpm install` |
 | `ERR_PNPM_IGNORED_BUILDS` | A new dependency wants to run an install script. Add it under `allowBuilds` in `pnpm-workspace.yaml` only if you trust it |
 | `DATABASE_URL is not set` | Step 5 was skipped: copy `.env.example` to `.env` |
+| `password authentication failed for user "westray-papa-westray"` | Your local database was created before the user, password and database were renamed from `westray`; PostgreSQL only sets them when its volume is first created. `pnpm db:up` now makes a fresh volume, as `compose.yaml` fixes the project name; if the old container still holds port 5432, stop it in Docker Desktop or with `docker ps` and `docker stop`, then run `pnpm db:up` and `pnpm db:migrate` again. Remove the old volume when you no longer need it: `docker volume ls` lists it with a `postgres-data` suffix |
 | `ECONNREFUSED 127.0.0.1:5432` | The database is not running: `pnpm db:up`, and check Docker Desktop is started |
 | `pnpm db:up` says port 5432 is already allocated | Another PostgreSQL is using the port. Stop it, or change the left-hand port in `compose.yaml` and in `DATABASE_URL` to match, such as `5433` |
 | Port 3000 is in use | Run `pnpm dev --port 3001` |
