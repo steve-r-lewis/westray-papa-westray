@@ -26,3 +26,16 @@ export function useDatabasePool(): pg.Pool | null {
   }
   return pool
 }
+
+let runtimePool: pg.Pool | null | undefined
+
+// The same database as DATABASE_RUNTIME_URL's role, which owns nothing and cannot
+// bypass row-level security: Identity and Profile serve requests through it, and
+// refuse to run as the role that owns their schemas. Null when either URL is unset.
+export function useRuntimeDatabasePool(): pg.Pool | null {
+  if (runtimePool === undefined) {
+    const url = process.env.DATABASE_RUNTIME_URL
+    runtimePool = url && process.env.DATABASE_URL ? new pg.Pool({ connectionString: url, max: 5 }) : null
+  }
+  return runtimePool
+}

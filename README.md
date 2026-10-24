@@ -8,21 +8,23 @@
 
 ## Status
 
-**Slice 1b built:** on top of slice 1a's shell, themes and migration runner, the site's facts and contacts come from Configuration and its content from Publisher. Accounts follow in slice 1c.
+**Slice 1c part 1 built:** on top of slice 1a's shell, themes and migration runner and slice 1b's facts and content, people can create an account, sign in with a second step, and see and change their account, security and own profile, through the IAM suite (Authentication, Identity, Profile and Authorisation). Editing and publishing on the site, and the members' area, follow in part 2.
 
 | Part | State |
 |---|---|
 | Home page | A panelled dashboard, after the mock-up: a panel for each section and for the noticeboard, photo of the week and poll. The What's on and News panels list the next events and the newest news from Publisher; the rest say what is coming until their slice fills them |
-| Header and footer | The header links to the sections and holds Appearance (palette and colour mode) and Sign in; every label and link is read from [`data/shell.json`](data/shell.json); responsive from phone to desktop |
-| Side menu | For signed-in members only, so hidden until sign-in arrives with slice 1c |
+| Header and footer | The header links to the sections and holds Appearance (palette and colour mode) and Sign in, or Account once signed in; every label and link is read from [`data/shell.json`](data/shell.json); responsive from phone to desktop |
+| Side menu | For signed-in members, once their second step is done: their account, profile and security |
+| Accounts | Sign in (password and a second step, or a passkey), create an account (confirmed by email), forgotten and new passwords; the account (its state, groups, pausing and closing it), security (password, authenticator app and backup codes, passkeys, where you are signed in) and the person's own profile (names and contact details, who sees each, how they are shown). Every member signs in with a second step. Drawn by the site's own components from [Authentication](https://github.com/nuxt4-layers/authentication/tree/v1.0.0), [Identity](https://github.com/nuxt4-layers/identity/tree/v1.0.0), [Profile](https://github.com/nuxt4-layers/profile/tree/v1.1.0) and [Authorisation](https://github.com/nuxt4-layers/authorisation/tree/v1.0.0) |
+| Access | Changes to content, themes and the site's settings ask Authorisation, which grants them only through a role in the platform group. Its one member is the platform super admin, who cannot sign in until part 2, so every change is still refused and nothing is edited on the site |
 | Site facts | The name, tagline, locale, default theme, title template, description, social links, the organisation (Westray Digital Access Group) and its contacts come from [Configuration](https://github.com/nuxt4-layers/configuration/tree/v1.2.0), set in `data/configuration.json` |
-| Content | Pages, articles, blog posts, events, workshops and Creative Trail stops are [Publisher](https://github.com/nuxt4-layers/publisher/tree/v1.0.0) documents, drawn by the site's own components. Nobody can change them on the site until slice 1c: they are seeded from `data/content/` |
+| Content | Pages, articles, blog posts, events, workshops and Creative Trail stops are [Publisher](https://github.com/nuxt4-layers/publisher/tree/v1.0.0) documents, drawn by the site's own components. Nobody can change them on the site until slice 1c part 2: they are seeded from `data/content/` |
 | Information pages | About and Policies (text from the mock-up), and Contact, which lists the general, data-protection and security contacts. A contact form waits for an enquiry capability |
 | News and What's on | Section pages for News, Articles, Blog, What's on, Events, Workshops and the Creative Trail list published documents, with RSS and Atom feeds. The real site starts empty |
 | For machines | `sitemap.xml`, `robots.txt` and `.well-known/security.txt` (RFC 9116, from Configuration's `contact.security`) |
 | Demonstration | A separate pre-launch deployment can run with invented content, a banner on every page and nothing indexed; see [Demonstration deployment](#demonstration-deployment) |
 | Themes | Four seasonal palettes (Spring, Summer, Autumn and Winter) stored by [Theme Manager](https://github.com/nuxt4-layers/theme-manager/tree/v0.2.2), meeting WCAG 2.2 AA contrast in light and dark; visitors choose a palette and a colour mode |
-| Pages still to come | Community, Market, Sign in and the account pages say "coming soon" |
+| Pages still to come | Community and Market say "coming soon" |
 
 See the [design](docs/design.md).
 
@@ -47,10 +49,11 @@ Westray-Papa-Westray draws every screen itself and composes headless `nuxt4-laye
 
 | Capability | Gives Westray-Papa-Westray |
 |---|---|
-| [`authentication`](https://github.com/nuxt4-layers/authentication) | Sign-in, sessions, step-up |
-| [`identity`](https://github.com/nuxt4-layers/identity) | Accounts, groups and memberships |
-| [`profile`](https://github.com/nuxt4-layers/profile) | People's own details, under their control |
-| [`authorisation`](https://github.com/nuxt4-layers/authorisation) | Roles and access decisions |
+| [`authentication`](https://github.com/nuxt4-layers/authentication/tree/v1.0.0) | Sign-in, sessions, second steps and step-up. Composed now, at its `v1.0.0` commit |
+| [`identity`](https://github.com/nuxt4-layers/identity/tree/v1.0.0) | Identities, groups and memberships. Composed now, at its `v1.0.0` commit |
+| [`profile`](https://github.com/nuxt4-layers/profile/tree/v1.1.0) | People's own details, under their control. Composed now, at its `v1.1.0` commit |
+| [`authorisation`](https://github.com/nuxt4-layers/authorisation/tree/v1.0.0) | Roles and access decisions. Composed now, at its `v1.0.0` commit |
+| [`iam-integration`](https://github.com/nuxt4-layers/iam-integration/tree/v1.1.0) | The reference adapters joining the four above, as their operations guide asks. Composed now, at its `v1.1.0` commit |
 | [`publisher`](https://github.com/nuxt4-layers/publisher/tree/v1.0.0) | Pages, articles, events and notices. Composed now, at its `v1.0.0` commit |
 | [`configuration`](https://github.com/nuxt4-layers/configuration/tree/v1.2.0) | Site facts, contact details and links. Composed now, at its `v1.2.0` commit |
 | [`theme-manager`](https://github.com/nuxt4-layers/theme-manager/tree/v0.2.2) | Themes, light and dark mode. Composed now, at its `v0.2.2` commit |
@@ -125,7 +128,14 @@ It holds these settings:
 | Variable | Default | Meaning |
 |---|---|---|
 | `DATABASE_URL` | `postgres://westray-papa-westray:westray-papa-westray@localhost:5432/westray-papa-westray` | The PostgreSQL database the site, migrations and seeding use; required. The default matches the container in `compose.yaml` |
-| `PLATFORM_SUPER_ADMIN_ID` | `00000000-0000-4000-8000-000000000001` | The platform super admin's account id. Seeded data, such as the example themes, belongs to this account; Identity creates the account with this id in slice 1c |
+| `DATABASE_RUNTIME_URL` | `postgres://westray_runtime:westray_runtime@localhost:5432/westray-papa-westray` | The same database as the role Identity and Profile serve requests as: one that owns nothing and cannot bypass their row-level security, named as a plain lower-case identifier. `pnpm db:seed` and the site create it as `DATABASE_URL`'s role, which therefore needs `CREATEROLE` (the container's user and Supabase's `postgres` have it) |
+| `PLATFORM_SUPER_ADMIN_ID` | `01900000-0000-7000-8000-000000000001` | The provisioning request (a UUIDv7) by which `pnpm db:seed` has Identity issue the platform super admin. Identity issues every identifier itself, so the seed records the super admin's identity id; the example themes belong to it, and it owns the platform group. Fixed once seeded |
+| `NUXT_AUTHENTICATION_SECRET` | A value for this machine only | Authentication's signing and encryption secret, at least 32 random bytes; every deployment has its own, from its secret store |
+| `NUXT_AUTHENTICATION_BASE_URL`, `NUXT_IDENTITY_BASE_URL`, `NUXT_PROFILE_BASE_URL`, `NUXT_AUTHORISATION_BASE_URL` | `http://localhost:3000` | The site's public origin, which each IAM layer checks every change against; `https` everywhere but on a developer's machine |
+| `PROFILE_KEYS`, `PROFILE_KEY_VERSION` | A key for this machine only, `dev-1` | Profile's master keys, which wrap each person's own data key: `version=key` pairs (32 random bytes in base64, separated by commas) and the version new keys are wrapped with. A deployment keeps its own in its secret store |
+| `MAIL_TRANSPORT` | `directory` | How the site's email leaves: `directory` writes each message as a JSON file in `MAIL_DIRECTORY`, for this machine and the tests; `smtp` sends it through `SMTP_URL`. Without one, nobody can confirm an address |
+| `MAIL_DIRECTORY` | `.mail` | Where `directory` mail is written: open the newest file there for a confirmation or reset link |
+| `MAIL_FROM`, `SMTP_URL` | empty | For `smtp`: the sender's address, and the server as `smtps://user:password@host:465` |
 | `DEMO_MODE` | `false` | `true` only on the separate demonstration deployment: see [Demonstration deployment](#demonstration-deployment) |
 | `DEMO_LAUNCH_DATE` | empty | The real site's launch date (`YYYY-MM-DD`) for the demonstration's banner; empty while it is to be announced |
 
@@ -136,12 +146,12 @@ To use a PostgreSQL 16 you already run instead of Docker, create a database and 
 ```sh
 pnpm db:up        # starts PostgreSQL 16 in Docker, listening on 127.0.0.1:5432 only
 pnpm db:migrate   # applies pending migrations; prints how many were applied
-pnpm db:seed      # loads the four example themes and the information pages; prints how many were added
+pnpm db:seed      # provisions the platform in Identity, then loads the four example themes and the information pages
 ```
 
 The data lives in the Docker volume `postgres-data`, so it survives restarts. Migration rules are in [the migrations folder](server/database/migrations/README.md).
 
-Seeding adds anything missing and leaves what is already stored alone, so it is safe to run again. `pnpm db:seed --update` overwrites the seeded themes with the versions in `data/themes/`, and saves any page whose file in `data/content/` has changed as a new Publisher version, publishing it if the page is published, so its history is kept. Publisher and Configuration create and migrate their own schemas (`publisher`, `configuration`); seeding migrates Publisher's first.
+Seeding first creates the runtime role and applies Identity's migrations, then provisions the platform in Identity, once: the tenant everyone signs up into, the platform super admin and the platform group they own (`data/platform.json`), recorded in the site's `platform` table. Seeding adds anything missing and leaves what is already stored alone, so it is safe to run again. `pnpm db:seed --update` overwrites the seeded themes with the versions in `data/themes/`, and saves any page whose file in `data/content/` has changed as a new Publisher version, publishing it if the page is published, so its history is kept. Publisher, Configuration and the IAM layers create and migrate their own schemas (`publisher`, `configuration`, `authentication`, `identity`, `profile`, `authorisation`) when the site starts; seeding migrates Identity's and Publisher's first.
 
 ### 7. Run the site
 
@@ -149,7 +159,7 @@ Seeding adds anything missing and leaves what is already stored alone, so it is 
 pnpm dev
 ```
 
-Open `http://localhost:3000`. You should see the site in its Spring palette: the header with the section links, Appearance and Sign in, the "Welcome to Westray's Digital Commons" banner, and the dashboard's panels. Appearance opens the palette picker and the System, Light and Dark switch. The footer's About, Contact and Policies pages show their text; News and What's on say there is nothing yet, because the real site starts empty (seed the [demonstration content](#demonstration-deployment) to see them filled). Community, Market and Sign in say "Coming soon". There is no side menu yet: it is for signed-in members, and signing in arrives with slice 1c. Stop the server with Ctrl+C.
+Open `http://localhost:3000`. You should see the site in its Spring palette: the header with the section links, Appearance and Sign in, the "Welcome to Westray's Digital Commons" banner, and the dashboard's panels. Appearance opens the palette picker and the System, Light and Dark switch. The footer's About, Contact and Policies pages show their text; News and What's on say there is nothing yet, because the real site starts empty (seed the [demonstration content](#demonstration-deployment) to see them filled). Community and Market say "Coming soon". Sign in, then Create an account: the confirmation link arrives as the newest file in `.mail/`. Follow it, sign in, and set up an authenticator app (or a passkey) as the second step; the side menu then appears, with Account, Profile and Security. Stop the server with Ctrl+C.
 
 If Appearance has no palette picker, the themes are not seeded (step 6) or the database is not running.
 
@@ -165,7 +175,8 @@ pnpm build       # production build into .output/
 
 | Suite | Proves |
 |---|---|
-| `tests/e2e/leaks.test.ts` | Canary leak tests. Drafts, scheduled and archived documents, a published article's newer draft and a members' notice each carry a unique canary string (`tests/fixtures/canaries/`). Anonymous requests to every page, API, feed, sitemap and error response, found by following every link, must never show one, and a hidden document's address must answer exactly as an address that never held anything |
+| `tests/e2e/leaks.test.ts` | Canary leak tests. Drafts, scheduled and archived documents, a published article's newer draft and a members' notice each carry a unique canary string (`tests/fixtures/canaries/`). Anonymous requests to every page, API, feed, sitemap and error response, found by following every link, must never show one, and a hidden document's address must answer exactly as an address that never held anything. Both hold again for a member who has signed up and in, and holds no role |
+| `tests/e2e/accounts.test.ts` | Accounts: a person signs up, confirms their address from the emailed link, signs in with an authenticator app and changes their profile; then no signed-out request to any account page or IAM API, from a browser that never signed in or one just signed out, shows their address, name or identifiers; and a member with no roles changes no theme, setting, document or group |
 | `tests/e2e/demo.test.ts` | The demonstration deployment: its banner on every page, `noindex` everywhere, a disallowing `robots.txt`, and the invented content listed |
 
 To include them:
@@ -254,7 +265,11 @@ function repoProvision {
 | `ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION` | The lockfile holds a package published less than a day ago. Pull the latest `master`; if it persists, report it rather than relaxing the rule |
 | `Command "nuxt" not found` or `Command "dev" not found` | Your `package.json` is not the repository's, often after an editor's project wizard rewrote it. Check with `git status`, restore it with `git restore package.json pnpm-lock.yaml`, then run `pnpm install` |
 | `ERR_PNPM_IGNORED_BUILDS` | A new dependency wants to run an install script. Add it under `allowBuilds` in `pnpm-workspace.yaml` only if you trust it |
-| `DATABASE_URL is not set` or `PLATFORM_SUPER_ADMIN_ID must be set` | Step 5 was skipped, or `.env` predates the second setting: copy `.env.example` to `.env` again |
+| `DATABASE_URL is not set` or `DATABASE_URL, DATABASE_RUNTIME_URL and PLATFORM_SUPER_ADMIN_ID must be set` | Step 5 was skipped, or `.env` predates a setting: copy `.env.example` to `.env` again |
+| `permission denied to create role` | `DATABASE_URL`'s role cannot create the runtime role: give it `CREATEROLE`, or create `DATABASE_RUNTIME_URL`'s role yourself (`login`, no other powers) |
+| The server logs `The platform is not provisioned`, and creating an account fails | Run `pnpm db:seed`, then restart the site |
+| No confirmation email arrives | With `MAIL_TRANSPORT=directory` it is the newest file in `MAIL_DIRECTORY` (`.mail/`); with `smtp`, check `SMTP_URL` and `MAIL_FROM` |
+| `PLATFORM_SUPER_ADMIN_ID differs from the request the platform super admin was provisioned by` | The database was seeded with another value. Keep the one it was seeded with, or start a clean database |
 | Appearance has no palette picker, and the site is in blue-grey | Theme Manager could not reach stored themes, so its built-in default applies: start the database and run `pnpm db:migrate` and `pnpm db:seed` |
 | `password authentication failed for user "westray-papa-westray"` | Your local database was created before the user, password and database were renamed from `westray`; PostgreSQL only sets them when its volume is first created. `pnpm db:up` now makes a fresh volume, as `compose.yaml` fixes the project name; if the old container still holds port 5432, stop it in Docker Desktop or with `docker ps` and `docker stop`, then run `pnpm db:up` and `pnpm db:migrate` again. Remove the old volume when you no longer need it: `docker volume ls` lists it with a `postgres-data` suffix |
 | Every page answers 503 | The site cannot reach its database, which Configuration and Publisher need for every page: start it with `pnpm db:up` |
@@ -298,19 +313,25 @@ The invented content then stays in your local database; `./scripts/provision.ps1
 
 | Path | Holds |
 |---|---|
-| `data/configuration.json` | The site's facts, as Configuration deployment values: name, tagline, locale, default theme, title template, description, social links, the organisation and its general, data-protection and security contacts. Administrators can override them at the platform scope once sign-in arrives in slice 1c |
-| `data/content/` | The real site's content, seeded into Publisher: one `.json` per document (type, title, address, dates) with its text beside it in `.md`. Only the information pages; everything else is published on the site from slice 1c |
+| `data/configuration.json` | The site's facts, as Configuration deployment values: name, tagline, locale, default theme, title template, description, social links, the organisation and its general, data-protection and security contacts. Administrators can override them at the platform scope once editing arrives in slice 1c part 2 |
+| `data/platform.json` | The platform as Identity holds it: its tenant's jurisdiction and data region, and the platform group's name |
+| `data/content/` | The real site's content, seeded into Publisher: one `.json` per document (type, title, address, dates) with its text beside it in `.md`. Only the information pages; everything else is published on the site from slice 1c part 2 |
 | `data/demo/` | Invented content for the demonstration deployment only, with dates relative to the day it is seeded |
-| `data/shell.json` | Labels, header links, the members' side menu, the footer, the home page's text and dashboard panels, the section pages (which types each lists, in which order), the Contact page's role names, the demonstration banner, the theme picker's order and the pages still to come |
+| `data/shell.json` | Labels, header links, every word of the sign-in and account pages and of the site's email, the members' side menu, the footer, the home page's text and dashboard panels, the section pages (which types each lists, in which order), the Contact page's role names, the demonstration banner, the theme picker's order and the pages still to come |
 | `data/themes/` | The four seasonal palettes, generated by `scripts/themes/generate.ts` |
-| `shared/shell.ts`, `shared/icons.ts`, `shared/content.ts` | The schema that data must meet, the icons it may name, and what the screens know of content: the site, the public and listed types, and a listing's cards |
+| `shared/shell.ts`, `shared/icons.ts`, `shared/content.ts`, `shared/account.ts` | The schema that data must meet, the icons it may name, what the screens know of content (the site, the public and listed types, and a listing's cards) and of the IAM suite's vocabulary (refusals, identity states, profile fields) |
+| `app/pages/sign-in.vue`, `sign-up.vue`, `forgot-password.vue`, `reset-password.vue`, `app/pages/account/` | The sign-in and account pages, drawn with the site's own components (`AppField`, `AppButton`, `AppNotice`, `AccountSection` and others) over the IAM layers' composables; the layers' own pages are not registered |
 | `app/` | Layout, components and pages, styled only with Theme Manager's semantic classes (`bg-fill-*`, `text-pen-*`, `border-edge-*`). `app/components/RichText.vue` draws Publisher's rich-text safe trees, never HTML |
 | `server/api/shell.get.ts` | Serves the shell data |
 | `server/utils/document-types.ts` | The document types registered with Publisher: page, article, blog post, event, workshop, Creative Trail stop, and the members' notice |
-| `server/plugins/publisher.ts` | Connects Publisher to the `pg` pool, one site (`westray`), nobody signed in, and access decisions that refuse every change until slice 1c (`server/utils/publisher-access.ts`). Publisher's own HTTP API is off |
+| `server/plugins/iam.ts`, `server/utils/iam.ts` | Composes the IAM suite with iam-integration's adapters: Authentication and Authorisation on `DATABASE_URL`'s pool, Identity and Profile on the runtime role's; the platform from the `platform` table; the outbox relays and maintenance, run every minute and every ten minutes as Nitro tasks (`server/tasks/iam/`), Vercel Cron in production |
+| `server/utils/permissions.ts` | Authorisation's catalogue: Identity's, Profile's, Configuration's, Publisher's (`publisher.<type>:<action>`) and Theme Manager's (`themes:<action>`, all `high`) permissions |
+| `server/utils/mail.ts` | The site's email: Authentication's messages and Profile's codes, in the shell's words, by SMTP or to a directory |
+| `server/database/seed-platform.ts`, `server/database/runtime-role.ts` | Provisioning the platform in Identity, and the runtime role |
+| `server/plugins/publisher.ts` | Connects Publisher to the `pg` pool, one site (`westray`), the signed-in person, and access decisions that ask Authorisation, on the platform group (`server/utils/publisher-access.ts`). Publisher's own HTTP API is off |
 | `server/api/content/`, `server/routes/` | What anyone may read: an address's published document, a section's listing, feeds, `sitemap.xml`, `robots.txt` and `security.txt` |
-| `server/plugins/configuration.ts` | Connects Configuration to PostgreSQL (its own `configuration` schema, migrated at start-up) and supplies the deployment values; its administration pages stay off until slice 1c |
-| `server/plugins/theme-manager.ts` | Connects Theme Manager to PostgreSQL (`server/utils/theme-store.ts`) and to the access policy (`server/utils/theme-policy.ts`): anyone may see and use public themes, and every change is refused until Authorisation arrives in slice 1c |
+| `server/plugins/configuration.ts` | Connects Configuration to PostgreSQL (its own `configuration` schema, migrated at start-up) and supplies the deployment values; its administration asks Identity and Authorisation through Configuration's own adapters, and its pages stay off until slice 1c part 2 |
+| `server/plugins/theme-manager.ts` | Connects Theme Manager to PostgreSQL (`server/utils/theme-store.ts`) and to the access policy (`server/utils/theme-policy.ts`): anyone may see and use public themes, and every change asks Authorisation, which no role yet grants |
 | `server/database/` | Migration runner, migrations and seeding: themes, and content through Publisher's `importPublisherContent` |
 | `tests/e2e/`, `tests/fixtures/canaries/` | The built site's tests, and the hidden content the leak tests look for |
 

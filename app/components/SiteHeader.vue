@@ -4,6 +4,9 @@ const emit = defineEmits<{ openMenu: [] }>()
 const shell = useShell()
 const site = useSite()
 const member = useMember()
+// Signed in, perhaps with the second step still to do: the account pages take it from there.
+const { isAuthenticated } = useAuthentication()
+const accountLink = computed(() => (isAuthenticated.value ? shell.value.header.account : shell.value.header.signIn))
 </script>
 
 <template>
@@ -47,12 +50,11 @@ const member = useMember()
     <div class="flex items-center gap-2">
       <AppearanceMenu />
       <NuxtLink
-        v-if="!member"
-        :to="shell.header.signIn.to"
+        :to="accountLink.to"
         class="flex items-center gap-2 whitespace-nowrap rounded-control border border-edge-accent-default bg-fill-accent-default px-3 py-1.5 font-medium text-pen-accent-default no-underline hover:border-edge-accent-hover hover:bg-fill-accent-hover hover:text-pen-accent-hover"
       >
-        <AppIcon v-if="shell.header.signIn.icon" :name="shell.header.signIn.icon" :size="18" />
-        {{ shell.header.signIn.label }}
+        <AppIcon v-if="accountLink.icon" :name="accountLink.icon" :size="18" />
+        {{ accountLink.label }}
       </NuxtLink>
     </div>
   </header>

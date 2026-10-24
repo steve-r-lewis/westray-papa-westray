@@ -40,7 +40,8 @@ jobs:
           --health-retries 10
     env:
       DATABASE_URL: postgres://westray-papa-westray:westray-papa-westray@postgres:5432/westray-papa-westray
-      PLATFORM_SUPER_ADMIN_ID: 00000000-0000-4000-8000-000000000001
+      DATABASE_RUNTIME_URL: postgres://westray_runtime:westray_runtime@postgres:5432/westray-papa-westray
+      PLATFORM_SUPER_ADMIN_ID: 01900000-0000-7000-8000-000000000001
       COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -53,8 +54,9 @@ jobs:
           pnpm install --frozen-lockfile
       - name: Type check
         run: pnpm typecheck
-      # Includes the canary leak tests and the demonstration's, each against the built
-      # site on a database of its own, created beside DATABASE_URL's and dropped after.
+      # Includes the canary leak tests, the accounts tests and the demonstration's, each
+      # against the built site on a database of its own, created beside DATABASE_URL's
+      # and dropped after.
       - name: Test
         run: pnpm test
       - name: Migrate and seed

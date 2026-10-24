@@ -18,6 +18,7 @@ const real = shellData as Shell
 const shell: Shell = structuredClone(real)
 shell.header.links = [{ label: 'Harbour', to: '/harbour' }]
 shell.header.signIn = { label: 'Log on', to: '/sign-in' }
+shell.header.account = { label: 'My place', to: '/account' }
 shell.home.panels = [
   { title: 'Around the isles', description: 'Places to go.', icon: 'trail', to: '/harbour', links: [{ label: 'Harbour', to: '/harbour', icon: 'trail' }], wide: true },
   { title: 'Gossip', description: 'Not built yet.', icon: 'poll', links: [] },
@@ -29,7 +30,7 @@ shell.footer.copyright = '© Test Isles'
 shell.labels.comingSoonTitle = 'Not yet'
 shell.labels.modeDark = 'Night'
 shell.themes.order = ['isles-winter', 'isles-summer']
-shell.comingSoon = [{ path: '/harbour', title: 'Harbour' }, { path: '/sign-in', title: 'Log on' }]
+shell.comingSoon = [{ path: '/harbour', title: 'Harbour' }]
 
 registerEndpoint('/api/shell', () => shell)
 // Configuration's public values, altered to prove the shell draws them.
@@ -54,8 +55,23 @@ async function withShell() {
   await Promise.all([loadShell(), loadSite()])
 }
 
+// Authentication's session, as its composable holds it: a member has finished the
+// second step the site requires.
+function signIn(level: 'aal1' | 'aal2') {
+  useState('authentication:required-level').value = 'aal2'
+  useState('authentication:principal').value = {
+    principalId: '01900000-0000-7000-8000-00000000a11c',
+    kind: 'person',
+    sessionId: 'session-1',
+    authenticatedAt: new Date().toISOString(),
+    expiresAt: new Date(Date.now() + 3_600_000).toISOString(),
+    assurance: { level, methods: level === 'aal2' ? ['password', 'totp'] : ['password'], phishingResistant: false },
+    standing: 'allowed',
+  }
+}
+
 afterEach(() => {
-  useMember().value = null
+  useState('authentication:principal').value = null
 })
 
 describe('shell components', () => {
@@ -75,11 +91,18 @@ describe('shell components', () => {
     expect(signedOut.find('button[aria-controls="site-menu"]').exists()).toBe(false)
     expect(signedOut.find('dialog#site-menu').exists()).toBe(false)
 
-    useMember().value = { id: 'member-1', displayName: 'A Member' }
+    // Signed in with a password alone, the second step still to do: no menu yet.
+    signIn('aal1')
+    const halfway = await mountSuspended(DefaultLayout)
+    expect(halfway.find('dialog#site-menu').exists()).toBe(false)
+    expect(halfway.find('a[href="/account"]').text()).toBe('My place')
+
+    signIn('aal2')
     const signedIn = await mountSuspended(DefaultLayout)
     expect(signedIn.find('button[aria-controls="site-menu"]').attributes('aria-expanded')).toBe('false')
     expect(signedIn.find('dialog#site-menu').exists()).toBe(true)
     expect(signedIn.find('a[href="/sign-in"]').exists()).toBe(false)
+    expect(signedIn.find('header a[href="/account"]').text()).toBe('My place')
   })
 
   it('menu draws groups from data and opens the group holding the current page', async () => {

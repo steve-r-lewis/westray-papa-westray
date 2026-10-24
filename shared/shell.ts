@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { ACCOUNT_ERROR_CODES, IDENTITY_STATES, PROFILE_FIELDS } from './account'
 import { LISTED_TYPES, LISTING_ORDERS } from './content'
 import { iconNames } from './icons'
 
@@ -56,6 +57,53 @@ export const sectionSchema = z.object({
   // Links to the RSS and Atom feeds of each of its types.
   feeds: z.boolean().optional(),
 }).strict()
+
+// A set of named labels, each required: `words('title', 'intro')`.
+function words<const K extends string>(...keys: K[]) {
+  return z.strictObject(Object.fromEntries(keys.map(key => [key, text])) as Record<K, typeof text>)
+}
+
+// Every word on the sign-in and account pages. `{name}` marks a value filled in.
+export const accountSchema = z.strictObject({
+  fields: words('email', 'password', 'newPassword', 'currentPassword', 'code', 'backupCode', 'passkeyName'),
+  passwordHint: text.refine(value => value.includes('{min}'), 'must contain {min}'),
+  working: text,
+  // What each refusal from Authentication, Identity or Profile says to the person.
+  errors: z.strictObject(Object.fromEntries(ACCOUNT_ERROR_CODES.map(code => [code, text])) as Record<(typeof ACCOUNT_ERROR_CODES)[number], typeof text>),
+  signIn: words('title', 'intro', 'submit', 'passkey', 'or', 'forgotPassword', 'noAccount', 'signUp', 'secondFactorTitle', 'secondFactorIntro', 'useBackupCode', 'useApp', 'continue', 'verified', 'verificationFailed', 'passwordReset'),
+  signUp: words('title', 'intro', 'submit', 'sent', 'haveAccount', 'signIn'),
+  forgotPassword: words('title', 'intro', 'submit', 'sent', 'backToSignIn'),
+  resetPassword: words('title', 'intro', 'submit', 'missingToken'),
+  secondFactor: words('title', 'intro', 'appTitle', 'appIntro', 'start', 'scan', 'key', 'confirm', 'backupCodesTitle', 'backupCodesIntro', 'done', 'passkeyTitle', 'passkeyIntro', 'addPasskey', 'stepUpTitle', 'stepUpIntro'),
+  reauthenticate: words('title', 'intro', 'submit', 'cancel'),
+  overview: z.strictObject({
+    ...words('title', 'intro', 'status', 'groups', 'noGroups', 'signOut', 'pauseTitle', 'pauseIntro', 'pause', 'resume', 'pausedIntro', 'closeTitle', 'closeIntro', 'close', 'closeConfirm', 'closing', 'cancelClose').shape,
+    states: z.strictObject(Object.fromEntries(IDENTITY_STATES.map(state => [state, text])) as Record<(typeof IDENTITY_STATES)[number], typeof text>),
+  }),
+  security: words('title', 'intro', 'passwordTitle', 'changePassword', 'passwordChanged', 'appTitle', 'appOn', 'appOff', 'setUpApp', 'backupCodesTitle', 'backupCodesLeft', 'newBackupCodes', 'passkeysTitle', 'noPasskeys', 'addPasskey', 'added', 'remove', 'sessionsTitle', 'thisDevice', 'signedInAt', 'signOutSession', 'signOutOthers', 'unknownDevice'),
+  profile: z.strictObject({
+    ...words('title', 'intro', 'details', 'audience', 'displayName', 'anonymiseOnDeparture', 'save', 'saved', 'download', 'unconfirmed').shape,
+    attributes: z.strictObject(Object.fromEntries(PROFILE_FIELDS.map(field => [field, text])) as Record<(typeof PROFILE_FIELDS)[number], typeof text>),
+    audiences: words('nobody', 'group', 'tenant'),
+    displayNames: words('name', 'preferred_username', 'given_name'),
+  }),
+})
+
+// The site's email, by message. `{time}`, `{code}` and `{minutes}` are filled in.
+const mailMessage = words('subject', 'body')
+
+export const mailSchema = z.strictObject({
+  signature: text,
+  expires: text.refine(value => value.includes('{time}'), 'must contain {time}'),
+  ignore: text,
+  messages: z.strictObject({
+    'email-verification': mailMessage,
+    'password-reset': mailMessage,
+    'email-change-confirmation': mailMessage,
+    'security-notification': mailMessage,
+    'contact-verification': mailMessage.refine(message => message.body.includes('{code}'), 'body must contain {code}'),
+  }),
+})
 
 // A page whose capability is not built yet says so; nothing is mocked.
 // Each slice removes its pages from this list as it builds them.
@@ -134,7 +182,11 @@ export const shellSchema = z.object({
   header: z.object({
     links: z.array(shellLinkSchema),
     signIn: shellLinkSchema,
+    // Shown instead of Sign in to a signed-in member.
+    account: shellLinkSchema,
   }).strict(),
+  account: accountSchema,
+  mail: mailSchema,
   // The side menu, for signed-in members only. It grows as members' features arrive.
   menu: z.object({
     groups: z.array(shellMenuGroupSchema).min(1),
@@ -180,6 +232,7 @@ export type Shell = z.infer<typeof shellSchema>
 export type ShellLink = z.infer<typeof shellLinkSchema>
 export type ComingSoonPage = z.infer<typeof comingSoonPageSchema>
 export type Section = z.infer<typeof sectionSchema>
+export type AccountWords = z.infer<typeof accountSchema>
 
 export function isExternal(to: string): boolean {
   return /^https:\/\//.test(to)

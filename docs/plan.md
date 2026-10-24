@@ -29,6 +29,7 @@ Report back with <the PR link only | the PR link and one line on …>.
 
 Newest first.
 
+- Slice 1c part 1, accounts: Authentication, Identity, Profile and Authorisation composed with iam-integration's adapters; sign-in, account, security and own profile pages; the platform super admin in Identity; access rules asking Authorisation: this PR
 - Theme Manager `v0.2.2` pinned here: [steve-r-lewis/westray-papa-westray#15](https://github.com/steve-r-lewis/westray-papa-westray/pull/15)
 - Theme Manager `v0.2.2` released, installing from Git without a `prepare` script: [nuxt4-layers/theme-manager#72](https://github.com/nuxt4-layers/theme-manager/pull/72)
 - `rich-text` pinned through a pnpm catalog: [steve-r-lewis/westray-papa-westray#14](https://github.com/steve-r-lewis/westray-papa-westray/pull/14)
@@ -38,13 +39,13 @@ Newest first.
 
 ## In progress
 
-Nothing: pinning Theme Manager `v0.2.2` has merged (see Done).
+Nothing: slice 1c part 1 is in review (see Done).
 
 ## Next
 
 In order:
 
-1. Slice 1c: accounts, through Authentication, Identity, Profile and Authorisation; then editing and publishing on the site, and the members' area.
+1. Slice 1c part 2: editing and publishing on the site, and the members' area. Includes the platform super admin's own sign-in (Identity holds them, but no Authentication account yet), the roles that grant the site's own permissions (`server/utils/permissions.ts`), Configuration's administration pages, and serving members' notices to members.
 2. A design note on contact and group responsibility, before slice 2: an enquiry capability and a contact form; creating, claiming and transferring groups; routing enquiries to a group without exposing anyone's personal address (see the design's [Contact](design.md#contact)).
 3. Theme Manager 1.0's design, from the design's [proposals](design.md#themes), in its own repository.
 4. The logo as a themed SVG, from the owner's Inkscape drawing.
@@ -70,6 +71,11 @@ Later work must not undo these without a decision of its own.
 - There is no contact form until an enquiry capability exists; personal addresses are never exposed.
 - Supabase is plain PostgreSQL only, never Supabase Auth or its data API; both it and Vercel stay in the UK.
 - Seasonal themes are `public` and must pass Theme Manager's contrast checks (WCAG 2.2 AA) in light and dark.
+- The site draws every screen: the IAM layers' own pages and components stay off (`presentation: false`), and every word on the account pages and in the site's email is in `data/shell.json`.
+- Every member signs in with a second step (Authentication's default); a member's side menu appears only once it is done.
+- Identity issues every identifier: `PLATFORM_SUPER_ADMIN_ID` names the provisioning request, and the `platform` table records what Identity issued. Never write to a layer's schema directly.
+- Identity and Profile serve requests as a runtime role that owns nothing and cannot bypass row-level security (`DATABASE_RUNTIME_URL`).
+- Signing in grants nothing: every change to content, themes and settings asks Authorisation, and the canary leak tests pass for a signed-in member with no roles as well as anonymously.
 
 ## Elsewhere
 
@@ -78,3 +84,8 @@ Each composed layer's roadmap, at the commit in use:
 - Configuration `v1.2.0`: [docs/roadmap.md](https://github.com/nuxt4-layers/configuration/blob/06703c5a45b370bf0f582bf012df1accc220db0b/docs/roadmap.md)
 - Publisher `v1.0.0`: [docs/roadmap.md](https://github.com/nuxt4-layers/publisher/blob/4410cab7b84c1b0395de2bdf657e3bcc3d476b87/docs/roadmap.md)
 - Theme Manager `v0.2.2`: no `docs/roadmap.md` at that commit; see its [docs](https://github.com/nuxt4-layers/theme-manager/tree/ddade879d29da489df67796d156fa85ad4f80324/docs)
+- Authentication `v1.0.0`: [docs/roadmap.md](https://github.com/nuxt4-layers/authentication/blob/64a192a7f8f653480a533fc618594b1a02857537/docs/roadmap.md)
+- Identity `v1.0.0`: [docs/roadmap.md](https://github.com/nuxt4-layers/identity/blob/1ae51150c078e359bb946ed50ed58759b25d1744/docs/roadmap.md)
+- Profile `v1.1.0`: [docs/roadmap.md](https://github.com/nuxt4-layers/profile/blob/09babb2440b8f8f6cbb1e1fed4258bb3e72627fc/docs/roadmap.md)
+- Authorisation `v1.0.0`: [docs/roadmap.md](https://github.com/nuxt4-layers/authorisation/blob/888b4ebfb05cb08bd90d04b862ab780f786a7862/docs/roadmap.md)
+- iam-integration `v1.1.0`: [docs/roadmap.md](https://github.com/nuxt4-layers/iam-integration/blob/a51bffe7e4730192047c9fa47b0fcb5d28ee7fcd/docs/roadmap.md), and its [operations guide](https://github.com/nuxt4-layers/iam-integration/blob/a51bffe7e4730192047c9fa47b0fcb5d28ee7fcd/docs/operations.md)

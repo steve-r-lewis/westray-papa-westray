@@ -106,6 +106,216 @@
       "label": "Sign in",
       "to": "/sign-in",
       "icon": "sign-in"
+    },
+    "account": {
+      "label": "Account",
+      "to": "/account",
+      "icon": "account"
+    }
+  },
+  "account": {
+    "fields": {
+      "email": "Email address",
+      "password": "Password",
+      "newPassword": "New password",
+      "currentPassword": "Current password",
+      "code": "Code from your authenticator app",
+      "backupCode": "Backup code",
+      "passkeyName": "A name for this passkey (optional)"
+    },
+    "passwordHint": "At least {min} characters. A few unrelated words make a strong password.",
+    "working": "Please wait…",
+    "errors": {
+      "invalid-credentials": "That email address and password do not match an account that can sign in.",
+      "mfa-required": "Please finish signing in with your second step.",
+      "invalid-mfa-code": "That code is not right. Check it and try again.",
+      "email-not-verified": "Please confirm your email address first, with the link we sent you.",
+      "password-rejected": "Please choose another password: that one is too short, too long or known from a data breach.",
+      "invalid-or-expired-token": "That link has expired or was already used. Please ask for a new one.",
+      "reauthentication-required": "Please confirm it is you, then try again.",
+      "insufficient-assurance": "Please finish signing in with your second step, then try again.",
+      "account-restricted": "Your account cannot do that at the moment.",
+      "unauthenticated": "Please sign in first.",
+      "session-expired": "You have been signed out. Please sign in again.",
+      "rate-limited": "Too many attempts. Please wait a few minutes and try again.",
+      "origin-rejected": "That request came from somewhere else, so it was refused.",
+      "validation-failed": "Please check what you entered and try again.",
+      "forbidden": "You cannot do that.",
+      "credential-limit-reached": "You have as many of those as an account may have.",
+      "conflict": "That cannot be done now: something else changed first. Please reload the page.",
+      "unavailable": "Something went wrong on our side. Please try again later."
+    },
+    "signIn": {
+      "title": "Sign in",
+      "intro": "Sign in to your Westray and Papa Westray account.",
+      "submit": "Sign in",
+      "passkey": "Sign in with a passkey",
+      "or": "or",
+      "forgotPassword": "Forgotten your password?",
+      "noAccount": "New here?",
+      "signUp": "Create an account",
+      "secondFactorTitle": "One more step",
+      "secondFactorIntro": "Enter the six-digit code from your authenticator app.",
+      "useBackupCode": "Use a backup code instead",
+      "useApp": "Use your authenticator app instead",
+      "continue": "Continue",
+      "verified": "Thank you: your email address is confirmed. You can sign in now.",
+      "verificationFailed": "That confirmation link has expired or was already used. Sign in, and if your address still needs confirming we will send a new link.",
+      "passwordReset": "Your password is changed. Sign in with your new one."
+    },
+    "signUp": {
+      "title": "Create an account",
+      "intro": "An account lets you join in as a member of the community: your profile, and more as the site grows.",
+      "submit": "Create account",
+      "sent": "Thank you. Check your email for a link to confirm your address; it may take a few minutes to arrive. If you already have an account, sign in instead.",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "forgotPassword": {
+      "title": "Forgotten your password",
+      "intro": "Enter your email address and we will send you a link to choose a new password.",
+      "submit": "Send the link",
+      "sent": "If an account uses that address, we have sent it a link to choose a new password. It works for 30 minutes.",
+      "backToSignIn": "Back to sign in"
+    },
+    "resetPassword": {
+      "title": "Choose a new password",
+      "intro": "Choosing a new password signs you out everywhere.",
+      "submit": "Save the new password",
+      "missingToken": "This page works from the link in your email. Ask for a new link if yours has expired."
+    },
+    "secondFactor": {
+      "title": "Protect your account",
+      "intro": "Every member signs in with a second step as well as a password, so nobody else can use your account even if they learn your password. Choose one to finish signing in.",
+      "appTitle": "An authenticator app",
+      "appIntro": "An app on your phone, such as Google Authenticator, Microsoft Authenticator or 2FAS, shows a new six-digit code every 30 seconds.",
+      "start": "Set up an authenticator app",
+      "scan": "Scan this code with your authenticator app, or type the key into it. Then enter the code it shows.",
+      "key": "Key",
+      "confirm": "Confirm",
+      "backupCodesTitle": "Your backup codes",
+      "backupCodesIntro": "Each code works once, if you ever lose your phone. Write them down or print them and keep them somewhere safe: they will not be shown again.",
+      "done": "I have kept my codes",
+      "passkeyTitle": "A passkey",
+      "passkeyIntro": "A passkey uses your phone's or computer's own lock (fingerprint, face or PIN) instead of a code, and cannot be tricked into signing in to a fake site.",
+      "addPasskey": "Add a passkey on this device",
+      "stepUpTitle": "Finish signing in",
+      "stepUpIntro": "Enter the code from your authenticator app to finish signing in."
+    },
+    "reauthenticate": {
+      "title": "Confirm it is you",
+      "intro": "For your safety, enter your password again before making this change.",
+      "submit": "Confirm",
+      "cancel": "Cancel"
+    },
+    "overview": {
+      "title": "Account",
+      "intro": "Your account on Westray and Papa Westray. Your profile says what others may see of you; security covers how you sign in.",
+      "status": "Status",
+      "groups": "Your groups",
+      "noGroups": "You are not in any groups yet. Clubs, committees and businesses arrive soon.",
+      "signOut": "Sign out",
+      "pauseTitle": "Take a break",
+      "pauseIntro": "Pausing hides you from the community and stops anything being sent to you, until you resume. You can still sign in to resume.",
+      "pause": "Pause my account",
+      "resume": "Resume my account",
+      "pausedIntro": "Your account is paused: nobody sees you and nothing is sent to you.",
+      "closeTitle": "Close your account",
+      "closeIntro": "Closing your account deletes your profile and your sign-in details at the end of a grace period. Until then you can change your mind.",
+      "close": "Close my account",
+      "closeConfirm": "Yes, close my account",
+      "closing": "Your account is closing, and will be deleted at the end of its grace period. Until then you can keep it.",
+      "cancelClose": "Keep my account",
+      "states": {
+        "active": "Active",
+        "paused": "Paused",
+        "suspended": "Suspended",
+        "closure-pending": "Closing",
+        "closed": "Closed",
+        "pending": "Waiting for your email address to be confirmed"
+      }
+    },
+    "security": {
+      "title": "Security",
+      "intro": "How you sign in, and where you are signed in.",
+      "passwordTitle": "Password",
+      "changePassword": "Change password",
+      "passwordChanged": "Your password is changed, and you are signed out everywhere else.",
+      "appTitle": "Authenticator app",
+      "appOn": "On",
+      "appOff": "Not set up",
+      "setUpApp": "Set up",
+      "backupCodesTitle": "Backup codes",
+      "backupCodesLeft": "{count} left",
+      "newBackupCodes": "Make new backup codes",
+      "passkeysTitle": "Passkeys",
+      "noPasskeys": "No passkeys yet.",
+      "addPasskey": "Add a passkey on this device",
+      "added": "Added",
+      "remove": "Remove",
+      "sessionsTitle": "Where you are signed in",
+      "thisDevice": "This device",
+      "signedInAt": "Signed in",
+      "signOutSession": "Sign out",
+      "signOutOthers": "Sign out everywhere else",
+      "unknownDevice": "A browser"
+    },
+    "profile": {
+      "title": "Profile",
+      "intro": "What you tell us about yourself, and who may see it. Only you see anything set to “Only me”.",
+      "details": "Your details",
+      "audience": "Who sees this",
+      "displayName": "Others see you as",
+      "anonymiseOnDeparture": "Show me as “Former member” in any group I leave",
+      "save": "Save",
+      "saved": "Saved.",
+      "download": "Download my details",
+      "unconfirmed": "Not confirmed",
+      "attributes": {
+        "name": "Full name",
+        "given_name": "First name",
+        "family_name": "Last name",
+        "preferred_username": "Known as",
+        "email": "Contact email",
+        "phone_number": "Telephone (international form, such as +447700900123)"
+      },
+      "audiences": {
+        "nobody": "Only me",
+        "group": "People in my groups",
+        "tenant": "Every member"
+      },
+      "displayNames": {
+        "name": "My full name",
+        "preferred_username": "The name I am known as",
+        "given_name": "My first name"
+      }
+    }
+  },
+  "mail": {
+    "signature": "Westray and Papa Westray",
+    "expires": "The link works until {time}.",
+    "ignore": "If you did not ask for this, you can ignore this email.",
+    "messages": {
+      "email-verification": {
+        "subject": "Confirm your email address",
+        "body": "Thank you for creating an account on Westray and Papa Westray. Follow this link to confirm your email address:"
+      },
+      "password-reset": {
+        "subject": "Choose a new password",
+        "body": "Follow this link to choose a new password for your Westray and Papa Westray account:"
+      },
+      "email-change-confirmation": {
+        "subject": "Confirm your new email address",
+        "body": "Follow this link to confirm the new email address for your Westray and Papa Westray account:"
+      },
+      "security-notification": {
+        "subject": "A change to how you sign in",
+        "body": "Something changed in how you sign in to your Westray and Papa Westray account. If it was not you, choose a new password straight away with “Forgotten your password?” on the sign-in page, and tell us through the Contact page."
+      },
+      "contact-verification": {
+        "subject": "Your confirmation code",
+        "body": "Your code to confirm this email address is {code}. It works for {minutes} minutes."
+      }
     }
   },
   "menu": {
@@ -399,22 +609,6 @@
     {
       "path": "/shop",
       "title": "Shop"
-    },
-    {
-      "path": "/sign-in",
-      "title": "Sign in"
-    },
-    {
-      "path": "/account",
-      "title": "Account"
-    },
-    {
-      "path": "/account/profile",
-      "title": "Profile"
-    },
-    {
-      "path": "/account/security",
-      "title": "Security"
     },
     {
       "path": "/community",
