@@ -89,6 +89,9 @@ export const accountSchema = z.strictObject({
   }),
 })
 
+// The members' area.
+export const membersSchema = words('title', 'intro', 'empty')
+
 // The site's email, by message. `{time}`, `{code}` and `{minutes}` are filled in.
 const mailMessage = words('subject', 'body')
 
@@ -187,6 +190,7 @@ export const shellSchema = z.object({
   }).strict(),
   account: accountSchema,
   mail: mailSchema,
+  members: membersSchema,
   // The side menu, for signed-in members only. It grows as members' features arrive.
   menu: z.object({
     groups: z.array(shellMenuGroupSchema).min(1),

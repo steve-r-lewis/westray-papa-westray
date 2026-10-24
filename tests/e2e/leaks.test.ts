@@ -10,8 +10,9 @@ import { Browser, root, signUpMember, testSite } from './support'
 // holding that content beside the real pages, and anonymous requests to every page,
 // API, feed, sitemap and error response must never show any canary. A hidden
 // document's address must also answer exactly as an address that never held one.
-// Both hold again for a signed-in member who holds no role: signing in grants nothing
-// until a role does.
+// Both hold again for a signed-in member who holds no role: to them drafts, scheduled
+// and archived documents stay hidden, and only the members' notices, which are for
+// members, may appear, in the members' area.
 //
 // Needs DATABASE_URL, as a role that may create databases; skipped without it.
 
@@ -62,9 +63,13 @@ async function get(path: string, accept = '*/*', reader: Reader = null): Promise
   return { path, status: response.status, headers, body: await response.text() }
 }
 
-function expectNoCanary(answer: Answer) {
-  for (const canary of canaries) expect(answer.body, `${answer.path} shows ${canary}`).not.toContain(canary)
-  expect(answer.body, `${answer.path} shows a canary`).not.toMatch(CANARY)
+// Members' notices are for signed-in members: to them alone, their canaries are no leak.
+const NOTICES = canaries.filter(canary => canary.startsWith('CANARY-members-notice-'))
+
+function expectNoCanary(answer: Answer, allowed: readonly string[] = []) {
+  const body = allowed.reduce((text, canary) => text.replaceAll(canary, ''), answer.body)
+  for (const canary of canaries.filter(canary => !allowed.includes(canary))) expect(body, `${answer.path} shows ${canary}`).not.toContain(canary)
+  expect(body, `${answer.path} shows a canary`).not.toMatch(CANARY)
   expect(answer.headers, `${answer.path} has a canary in its headers`).not.toMatch(CANARY)
 }
 
@@ -79,12 +84,14 @@ function linksIn(body: string): string[] {
   return [...found]
 }
 
-function neverShowsHiddenContent(reader: () => Promise<Reader>) {
+function neverShowsHiddenContent(reader: () => Promise<Reader>, allowed: readonly string[] = []) {
   it('on any page, API, feed, sitemap or error response', { timeout: 300_000 }, async () => {
     const who = await reader()
     const start = [
       '/', '/about', '/contact', '/policies', '/news', '/articles', '/blog', '/whats-on', '/events', '/workshops', '/creative-trail',
       '/sitemap.xml', '/robots.txt', '/.well-known/security.txt',
+      // The members' area: none of it for anyone signed out.
+      '/members', '/api/members/notices',
       '/api/shell', '/api/configuration/public', '/api/themes',
       ...['article', 'blog-post', 'event', 'workshop', 'creative-trail-stop', 'members-notice', 'page'].flatMap(type => [`/feeds/${type}/rss`, `/feeds/${type}/atom`]),
       ...['/news', '/articles', '/blog', '/whats-on', '/events', '/workshops', '/creative-trail'].map(section => `/api/content/listing?section=${section}`),
@@ -103,8 +110,8 @@ function neverShowsHiddenContent(reader: () => Promise<Reader>) {
       if (seen.has(path)) continue
       seen.add(path)
       const answer = await get(path, 'text/html', who)
-      expectNoCanary(answer)
-      expectNoCanary(await get(path, '*/*', who))
+      expectNoCanary(answer, allowed)
+      expectNoCanary(await get(path, '*/*', who), allowed)
       if (answer.status === 200) queue.push(...linksIn(answer.body).filter(link => !seen.has(link)))
       // Every published document is also asked for through the content API.
       if (path.endsWith('.xml')) queue.push(...linksIn(answer.body).map(link => `/api/content/resolve?path=${link}`))
@@ -122,7 +129,7 @@ function neverShowsHiddenContent(reader: () => Promise<Reader>) {
     const page = await get((await get('/api/content/listing?section=/articles', '*/*', who)).body.match(/"path":\s*"([^"]+published-with-draft)"/)![1]!, '*/*', who)
     expect(page.status).toBe(200)
     expect(page.body).toContain('A published article')
-    expectNoCanary(page)
+    expectNoCanary(page, allowed)
   })
 
   it('answers a hidden document exactly as a missing one', async () => {
@@ -172,5 +179,11 @@ describe.skipIf(!url)('a signed-in member with no roles never sees hidden conten
     expect(page.body).toContain('id="site-menu"')
   })
 
-  neverShowsHiddenContent(signedIn)
+  it('sees the members\' notices, in the members\' area alone', async () => {
+    const notices = await get('/members', 'text/html', await signedIn())
+    expect(notices.status).toBe(200)
+    for (const canary of NOTICES) expect(notices.body).toContain(canary)
+  })
+
+  neverShowsHiddenContent(signedIn, NOTICES)
 })
