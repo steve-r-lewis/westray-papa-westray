@@ -133,7 +133,4 @@ To be confirmed with legal advice before each slice goes live.
 
 ## Next
 
-1. Slice 1c: accounts, through Authentication, Identity, Profile and Authorisation; then editing and publishing on the site, and the members' area.
-2. A design note on contact and group responsibility, before slice 2 (see [Contact](#contact)).
-3. Theme Manager 1.0 design, from the table above, in its own repository.
-4. The logo as a themed SVG, from the owner's Inkscape drawing.
+What comes next is in the [plan](plan.md#next).

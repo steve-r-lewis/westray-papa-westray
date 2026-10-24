@@ -316,6 +316,7 @@ The invented content then stays in your local database; `./scripts/provision.ps1
 
 ## Documents
 
+- [Plan](docs/plan.md): how we work, what is done and what comes next; read it first
 - [Design](docs/design.md): site map, slices, themes, deployment, later stores and legal duties
 - [Platform architecture](https://github.com/nuxt4-layers/platform-architecture/tree/b3ef6dd53faa097d7a6b509ec714ea7e447b3051): the rules every layer follows
 
