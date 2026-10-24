@@ -30,16 +30,16 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_USER: westray
-          POSTGRES_PASSWORD: westray
-          POSTGRES_DB: westray
+          POSTGRES_USER: westray-papa-westray
+          POSTGRES_PASSWORD: westray-papa-westray
+          POSTGRES_DB: westray-papa-westray
         options: >-
-          --health-cmd "pg_isready -U westray -d westray"
+          --health-cmd "pg_isready -U westray-papa-westray -d westray-papa-westray"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
     env:
-      DATABASE_URL: postgres://westray:westray@postgres:5432/westray
+      DATABASE_URL: postgres://westray-papa-westray:westray-papa-westray@postgres:5432/westray-papa-westray
       COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

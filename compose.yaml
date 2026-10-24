@@ -1,17 +1,21 @@
 # Local PostgreSQL 16, matching production's major version.
+# A fixed project name keeps the container and volume names the same whatever
+# the clone's folder is called.
+name: westray-papa-westray
+
 services:
   postgres:
     image: postgres:16
     environment:
-      POSTGRES_USER: westray
-      POSTGRES_PASSWORD: westray
-      POSTGRES_DB: westray
+      POSTGRES_USER: westray-papa-westray
+      POSTGRES_PASSWORD: westray-papa-westray
+      POSTGRES_DB: westray-papa-westray
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U westray -d westray"]
+      test: ["CMD-SHELL", "pg_isready -U westray-papa-westray -d westray-papa-westray"]
       interval: 5s
       timeout: 5s
       retries: 10
