@@ -53,12 +53,19 @@ jobs:
           pnpm install --frozen-lockfile
       - name: Type check
         run: pnpm typecheck
+      # Includes the canary leak tests and the demonstration's, each against the built
+      # site on a database of its own, created beside DATABASE_URL's and dropped after.
       - name: Test
         run: pnpm test
       - name: Migrate and seed
         run: |
           pnpm db:migrate
           pnpm db:seed
+          pnpm db:seed --update
+      - name: Seed the demonstration content
+        run: pnpm db:seed
+        env:
+          DEMO_MODE: "true"
       - name: Build
         run: pnpm build
 

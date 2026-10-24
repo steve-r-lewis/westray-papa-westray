@@ -12,8 +12,12 @@ moving_ref = re.compile(
 )
 errors = []
 files = sorted(root.rglob("*.md"))
+# Content bodies (Publisher's documents, seeded from data/ and the test fixtures) are
+# not documentation: the page title is their heading and their links are the site's.
+content = {("data", "content"), ("data", "demo"), ("tests", "fixtures")}
 for file in files:
-    if any(part in {".git", "node_modules", ".nuxt"} for part in file.relative_to(root).parts):
+    parts = file.relative_to(root).parts
+    if any(part in {".git", "node_modules", ".nuxt", ".output"} for part in parts) or parts[:2] in content:
         continue
     lines = file.read_text(encoding="utf-8").splitlines()
     if not any(re.match(r"^#\s+\S", line) for line in lines):

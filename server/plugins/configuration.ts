@@ -1,12 +1,14 @@
 import deployment from '../../data/configuration.json'
 
 // Connects Configuration. The site's facts (name, tagline, locale, default theme,
-// title template, social links) are deployment values from data/configuration.json:
-// they need no sign-in or approval. Once Identity and Authorisation are composed in
-// slice 1c, administrators can override them at the platform scope.
+// title template, social links, organisation and contacts) are deployment values from
+// data/configuration.json: they need no sign-in or approval. Once Identity and
+// Authorisation are composed in slice 1c, administrators can override them at the
+// platform scope. The application declares its own demonstration settings, locked,
+// so they come from the deployment's environment alone (server/utils/demo.ts).
 export default defineNitroPlugin(async () => {
-  provideConfigurationCatalogue([])
-  provideConfigurationDeployment(deployment)
+  provideConfigurationCatalogue(DEMO_SETTINGS)
+  provideConfigurationDeployment({ ...deployment, ...demoDeployment() })
   // Nobody can sign in until slice 1c, so every request is anonymous.
   provideConfigurationSubjectResolver({ resolve: async () => null })
 

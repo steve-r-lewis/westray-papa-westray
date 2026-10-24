@@ -1,0 +1,25 @@
+{
+  "id": "01a17d16-ab05-7b40-a0cf-67158993abc2",
+  "type": "event",
+  "title": "CANARY-scheduled-event-672e776b",
+  "summary": "CANARY-scheduled-event-672e776b",
+  "slug": "hidden-scheduled-event",
+  "published": {
+    "days": -1
+  },
+  "status": "scheduled",
+  "publishAt": {
+    "days": 3000
+  },
+  "fields": {
+    "startsAt": {
+      "days": 3010,
+      "time": "19:00"
+    },
+    "venue": "CANARY-scheduled-event-672e776b",
+    "organiser": "CANARY-scheduled-event-672e776b"
+  },
+  "dateFields": [
+    "startsAt"
+  ]
+}

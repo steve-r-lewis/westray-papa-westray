@@ -1,0 +1,17 @@
+{
+  "id": "01a17d16-ab09-783a-9939-c5eb24d214d9",
+  "type": "article",
+  "title": "A published article",
+  "summary": "Public words.",
+  "slug": "published-with-draft",
+  "published": {
+    "days": -1
+  },
+  "newerDraft": {
+    "title": "CANARY-newer-draft-60acb3fd",
+    "summary": "CANARY-newer-draft-60acb3fd",
+    "fields": {
+      "body": "Unpublished second version CANARY-newer-draft-60acb3fd."
+    }
+  }
+}

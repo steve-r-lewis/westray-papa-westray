@@ -1,0 +1,1 @@
+Learn to spin on a wheel or a drop spindle with Ingrid Flett. Fleece and tools provided; bring a packed lunch. Six places. Booking opens with the site's bookings, later; until then, email crafts@example.org.

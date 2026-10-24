@@ -1,10 +1,14 @@
 import { z } from 'zod'
+import { LISTED_TYPES, LISTING_ORDERS } from './content'
 import { iconNames } from './icons'
 
 // The shell is everything around a page: header, side menu and footer.
 // Every label and link in it is data; this schema is the contract that data meets.
 
 const text = z.string().trim().min(1)
+
+// A site path ("/news"): no query, fragment or trailing slash.
+const sitePath = z.string().regex(/^\/(?:[a-z0-9-]+(?:\/[a-z0-9-]+)*)?$/, 'must be a path such as "/news"')
 
 // An internal path ("/about") or an absolute https:// address.
 const href = z.string().refine(
@@ -36,6 +40,21 @@ export const homePanelSchema = z.object({
   links: z.array(shellLinkSchema),
   // Wide panels span two columns on large screens.
   wide: z.boolean().optional(),
+  // A section (below) whose newest or next few documents the panel lists.
+  section: sitePath.optional(),
+}).strict()
+
+// A section page listing Publisher's documents: News, What's on, Events and the like.
+export const sectionSchema = z.object({
+  path: sitePath,
+  title: text,
+  intro: text,
+  types: z.array(z.enum(LISTED_TYPES)).min(1),
+  order: z.enum(LISTING_ORDERS),
+  // Said when there is nothing to list.
+  empty: text,
+  // Links to the RSS and Atom feeds of each of its types.
+  feeds: z.boolean().optional(),
 }).strict()
 
 // A page whose capability is not built yet says so; nothing is mocked.
@@ -83,6 +102,34 @@ export const shellSchema = z.object({
     errorTitle: text,
     errorBody: text,
     backHome: text,
+    published: text,
+    updated: text,
+    when: text,
+    where: text,
+    organiser: text,
+    stop: text,
+    maker: text,
+    feeds: text,
+    rss: text,
+    atom: text,
+    // Each listed type's name, as a section with several types names its feeds.
+    typeNames: z.record(z.enum(LISTED_TYPES), text),
+    // The demonstration deployment's banner; {date} is the launch date.
+    demoBanner: text.refine(value => value.includes('{date}'), 'must contain {date}'),
+    demoDateToBeAnnounced: text,
+  }).strict(),
+  // The Contact page: the platform's organisation and contacts come from Configuration.
+  contact: z.object({
+    organisation: text,
+    roles: z.object({
+      'general': text,
+      'data-protection': text,
+      'security': text,
+    }).strict(),
+    email: text,
+    phone: text,
+    web: text,
+    securityTxt: text,
   }).strict(),
   header: z.object({
     links: z.array(shellLinkSchema),
@@ -105,9 +152,22 @@ export const shellSchema = z.object({
     actions: z.array(shellLinkSchema).max(2),
     panels: z.array(homePanelSchema).min(1),
   }).strict(),
+  sections: z.array(sectionSchema),
   comingSoon: z.array(comingSoonPageSchema),
 }).strict().superRefine((shell, context) => {
-  const paths = new Set<string>()
+  const sections = new Set<string>()
+  shell.sections.forEach((section, index) => {
+    if (sections.has(section.path)) {
+      context.addIssue({ code: 'custom', path: ['sections', index, 'path'], message: `duplicate section ${section.path}` })
+    }
+    sections.add(section.path)
+  })
+  shell.home.panels.forEach((panel, index) => {
+    if (panel.section && !sections.has(panel.section)) {
+      context.addIssue({ code: 'custom', path: ['home', 'panels', index, 'section'], message: `no section ${panel.section}` })
+    }
+  })
+  const paths = new Set<string>(sections)
   shell.comingSoon.forEach((page, index) => {
     if (paths.has(page.path)) {
       context.addIssue({ code: 'custom', path: ['comingSoon', index, 'path'], message: `duplicate page ${page.path}` })
@@ -119,6 +179,7 @@ export const shellSchema = z.object({
 export type Shell = z.infer<typeof shellSchema>
 export type ShellLink = z.infer<typeof shellLinkSchema>
 export type ComingSoonPage = z.infer<typeof comingSoonPageSchema>
+export type Section = z.infer<typeof sectionSchema>
 
 export function isExternal(to: string): boolean {
   return /^https:\/\//.test(to)

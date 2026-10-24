@@ -1,8 +1,8 @@
 import { shellSchema, type Shell } from '#shared/shell'
 import shellData from '../../data/shell.json'
 
-// Port for the shell's labels and links. Slice 1b replaces the file source
-// with Configuration and Publisher; callers do not change.
+// Port for the shell's labels, links and sections. The site's facts are
+// Configuration's and its content Publisher's; this is how the screens draw them.
 export interface ShellSource {
   load(): Promise<unknown>
 }

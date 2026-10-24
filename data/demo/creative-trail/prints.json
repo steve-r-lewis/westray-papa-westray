@@ -1,0 +1,15 @@
+{
+  "id": "01a17720-ca12-7ee5-bf7d-e48a06037c05",
+  "type": "creative-trail-stop",
+  "title": "Tide Line Prints",
+  "slug": "prints",
+  "summary": "Linocut prints of birds, boats and weather.",
+  "published": {
+    "days": -20
+  },
+  "fields": {
+    "stop": 3,
+    "location": "The old schoolhouse, Rapness",
+    "maker": "Sandy Groat"
+  }
+}

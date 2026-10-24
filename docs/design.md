@@ -31,11 +31,38 @@ The platform's capabilities are headless ([ADR-0009](https://github.com/nuxt4-la
 | Market | Market, Shop, Products, Shops | New capabilities: product, order, payment | 6 |
 | Bookings | Workshop booking | New capability: booking | 7 |
 
-Document types (article, blog post, event, workshop, trail stop, group page, notice) are registered by Westray-Papa-Westray with the publisher; no layer names them.
+Document types (page, article, blog post, event, workshop, trail stop, members' notice; later group page and notice) are registered by Westray-Papa-Westray with the publisher; no layer names them.
 
 ## Site facts
 
 Slice 1b composes Configuration `v1.2.0`. The site's name, tagline, locale, default theme, title template, description and social links are deployment values in `data/configuration.json`, read through Configuration's public endpoint. Changing a value at the platform scope goes through Identity and Authorisation (who may change it, and a second person for `high` settings), so its administration pages are switched off until slice 1c; until then a change is a commit. Configuration keeps its tables in its own schema and migrates them at start-up. Unlike its documentation's account, it needs the database even to serve deployment values, so the site now requires one.
+
+### Contact
+
+The organisation (Westray Digital Access Group) and its `contact.general`, `contact.data-protection` and `contact.security` are deployment values too, each now the one mailbox. The Contact page lists them by role (general enquiries, data protection officer, security) under the words of Publisher's `/contact` page, and `/.well-known/security.txt` (RFC 9116) is written from `contact.security`, with an `Expires` six months ahead worked out on every request.
+
+There is no contact form. A form needs somewhere to send what people write and a way to choose who attends to it, which belong to an enquiry capability, still to be designed. Before slice 2, a design note covers contact and group responsibility: that capability, creating, claiming and transferring groups, and routing enquiries to a group without exposing anyone's personal address.
+
+## Content
+
+Slice 1b composes Publisher `v1.0.0` for everything a visitor reads beyond the shell.
+
+| Part | How |
+|---|---|
+| Types | Registered by the site (`server/utils/document-types.ts`): page (at the site's root), article and blog post (dated addresses, listed and fed), event and workshop (start, end, venue, organiser), Creative Trail stop (number, place, maker), and members' notice. Every formatted field is `rich-text`, checked on every save |
+| Storage | Publisher's own `publisher` schema on the application's `pg` pool, migrated at start-up |
+| Who | One site (`westray`), nobody signed in, and access decisions that refuse every change and every draft preview until Authorisation arrives in slice 1c. Approval is off for every type until then; legal pages are candidates for it |
+| Reading | Publisher's own HTTP API is switched off. The site serves only what anyone may read, through `server/api/content/` (an address's published document; a section's cards), feeds per listed type, and the sitemap. Whatever a reader may not see answers exactly as nothing at all |
+| Drawing | The site's own components, with Theme Manager's classes only. Rich text arrives as safe trees and is drawn node by node, never as HTML; `doc:` links follow their document's current address, or are plain text while it is unpublished |
+| Sections | Listed in `data/shell.json`: which types each lists and in which order (newest first, what is still to come, or by trail stop). The What's on and News dashboard panels show the first few of their section |
+| Seeding | `pnpm db:seed` imports `data/content/` with `importPublisherContent`; `--update` saves a changed file as a new version. The real site starts with its information pages only |
+| Members only | The members' notice has no address and no feed, so nothing serves it until the members' area in slice 1c. A published document's audience cannot be narrowed by a field, because Publisher's listings, feeds and sitemap know nothing of audiences |
+
+The leak tests seed drafts, scheduled and archived documents, a newer draft of a published article and a members' notice, each with a canary string, and prove that no anonymous answer ever shows one.
+
+### Demonstration
+
+A separate pre-launch deployment shows the site filled with invented content. Two settings the application declares with Configuration, `demo.enabled` and `demo.launch-date`, are `locked`, so the deployment's environment alone sets them. With them, every page carries a banner saying everything is fictitious, when the site launches and that it starts empty; nothing is indexed (`noindex` on every answer, a disallowing `robots.txt`); and the seed adds `data/demo/`, whose dates are relative to the day it runs. The demonstration's groups are invented but based on island life, with fictitious people, `01632 960xxx` numbers and `example.org` addresses; groups that exist on the islands keep only their names.
 
 ## Themes
 
@@ -106,5 +133,7 @@ To be confirmed with legal advice before each slice goes live.
 
 ## Next
 
-1. Slice 1: the application shell and layout, Westray-Papa-Westray themes, information, news, what's on and accounts.
-2. Theme Manager 1.0 design, from the table above, in its own repository.
+1. Slice 1c: accounts, through Authentication, Identity, Profile and Authorisation; then editing and publishing on the site, and the members' area.
+2. A design note on contact and group responsibility, before slice 2 (see [Contact](#contact)).
+3. Theme Manager 1.0 design, from the table above, in its own repository.
+4. The logo as a themed SVG, from the owner's Inkscape drawing.

@@ -1,0 +1,15 @@
+{
+  "id": "01a17720-ca14-72ed-9172-2012b0815c22",
+  "type": "creative-trail-stop",
+  "title": "North Isles Silver",
+  "slug": "papay-jewellery",
+  "summary": "Silver jewellery inspired by the island's oldest buildings.",
+  "published": {
+    "days": -20
+  },
+  "fields": {
+    "stop": 5,
+    "location": "Holland farm steading, Papa Westray",
+    "maker": "Lena Rendall"
+  }
+}

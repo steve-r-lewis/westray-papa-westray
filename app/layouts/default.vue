@@ -10,7 +10,12 @@ useHead({
   bodyAttrs: { class: 'bg-fill-floor-default text-pen-floor-default' },
   // Configuration's seo.title-template places the page title; the home page is just the name.
   titleTemplate: title => title && site.value.titleTemplate ? site.value.titleTemplate.replace('%s', title) : site.value.name,
-  meta: [{ name: 'description', content: () => site.value.description }],
+  meta: [
+    { name: 'description', content: () => site.value.description },
+    // The demonstration deployment is never indexed; server/middleware/demo-noindex.ts
+    // says so for every other answer too.
+    { name: 'robots', content: () => (site.value.demo.enabled ? 'noindex, nofollow' : undefined) },
+  ],
 })
 </script>
 
@@ -20,6 +25,7 @@ useHead({
       class="absolute left-2 top-2 z-50 -translate-y-[200%] rounded-control border border-edge-accent-default bg-fill-accent-default px-4 py-2 text-pen-accent-default focus:translate-y-0"
       href="#main"
     >{{ shell.labels.skipToContent }}</a>
+    <DemoBanner v-if="site.demo.enabled" />
     <SiteMenu v-if="member" v-model:open="menuOpen" />
     <SiteHeader :menu-open="menuOpen" @open-menu="menuOpen = true" />
     <main id="main" tabindex="-1" class="flex-1 px-4 outline-none sm:px-0">

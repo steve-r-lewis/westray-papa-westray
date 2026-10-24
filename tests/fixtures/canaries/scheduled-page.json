@@ -1,0 +1,14 @@
+{
+  "id": "01a17d16-ab02-7213-a569-abf4eb38c86e",
+  "type": "page",
+  "title": "CANARY-scheduled-page-e8a76293",
+  "summary": "CANARY-scheduled-page-e8a76293",
+  "slug": "hidden-scheduled-page",
+  "published": {
+    "days": -1
+  },
+  "status": "scheduled",
+  "publishAt": {
+    "days": 3000
+  }
+}

@@ -1,0 +1,1 @@
+A gentle walk away from the lights to look at the winter sky, with flasks of hot chocolate. Bring a torch with a red light if you have one. Cancelled if it is cloudy; check with Jim Hourston on 01632 960 905 on the day.

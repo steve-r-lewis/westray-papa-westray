@@ -1,0 +1,15 @@
+{
+  "id": "01a17720-ca11-7c43-9e83-0c98fefbe945",
+  "type": "creative-trail-stop",
+  "title": "Cliff Top Knitwear",
+  "slug": "knitwear",
+  "summary": "Fair Isle and gansey knitting from island wool.",
+  "published": {
+    "days": -20
+  },
+  "fields": {
+    "stop": 2,
+    "location": "Noup farm road",
+    "maker": "Ingrid Flett"
+  }
+}

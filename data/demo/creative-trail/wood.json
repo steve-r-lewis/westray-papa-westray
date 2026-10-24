@@ -1,0 +1,15 @@
+{
+  "id": "01a17720-ca13-789f-b9ce-6f7325d820d5",
+  "type": "creative-trail-stop",
+  "title": "Driftwood Workshop",
+  "slug": "wood",
+  "summary": "Furniture and carvings from wood the sea brings in.",
+  "published": {
+    "days": -20
+  },
+  "fields": {
+    "stop": 4,
+    "location": "Skaill, by the road end",
+    "maker": "Tom Harcus"
+  }
+}
