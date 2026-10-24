@@ -20,9 +20,11 @@
     "themes:generate": "tsx scripts/themes/generate.ts"
   },
   "dependencies": {
+    "@nuxt4-layers/configuration": "github:nuxt4-layers/configuration#06703c5a45b370bf0f582bf012df1accc220db0b",
     "@nuxt4-layers/theme-manager": "github:nuxt4-layers/theme-manager#e63274dd0fa8801090252e7f07ecfa4145a3ea6b",
     "@tailwindcss/vite": "^4.3.3",
     "nuxt": "^4.6.2",
+    "pg": "^8.23.1",
     "postgres": "^3.4.9",
     "tailwindcss": "^4.3.3",
     "vue": "^3.5.44",
@@ -31,6 +33,7 @@
   },
   "devDependencies": {
     "@nuxt/test-utils": "^4.3.4",
+    "@types/pg": "^8.23.1",
     "@vue/test-utils": "^2.5.1",
     "happy-dom": "^21.0.4",
     "tsx": "^4.23.15",

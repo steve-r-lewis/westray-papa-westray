@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const shell = useShell()
+const site = useSite()
 </script>
 
 <template>
@@ -13,15 +14,15 @@ const shell = useShell()
           </li>
         </ul>
       </nav>
-      <ul v-if="shell.footer.social.length" :aria-label="shell.labels.social" class="flex gap-2">
-        <li v-for="link in shell.footer.social" :key="link.to">
+      <ul v-if="site.social.length" :aria-label="shell.labels.social" class="flex gap-2">
+        <li v-for="link in site.social" :key="link.url">
           <NuxtLink
-            :to="link.to"
+            :to="link.url"
             target="_blank"
             class="flex rounded-control bg-fill-link-default p-1 text-pen-link-default hover:bg-fill-link-hover hover:text-pen-link-hover"
           >
-            <AppIcon :name="link.icon" :size="22" />
-            <span class="sr-only">{{ link.label }}</span>
+            <AppIcon :name="socialIcon(link.network)" :size="22" />
+            <span class="sr-only">{{ shell.labels.networks[link.network] ?? link.network }}</span>
           </NuxtLink>
         </li>
       </ul>

@@ -46,17 +46,14 @@ export const comingSoonPageSchema = z.object({
 }).strict()
 
 export const shellSchema = z.object({
+  // The site's name, tagline, locale, default theme and social links are
+  // Configuration's (data/configuration.json); this holds only how the shell draws them.
   site: z.object({
-    name: text,
-    tagline: text,
     // The drawer shows the name across lines, as on the mock-up.
     nameLines: z.array(text).min(1),
-    locale: z.string().regex(/^[a-z]{2}(?:-[A-Z]{2})?$/),
     logo: z.object({ src: href, alt: z.string() }).strict(),
   }).strict(),
   themes: z.object({
-    // The theme a visitor sees until they choose one. Configuration takes this over.
-    default: z.string().regex(/^[a-z0-9-]{1,64}$/),
     // The order the theme picker lists these in; any other public theme follows.
     order: z.array(z.string().regex(/^[a-z0-9-]{1,64}$/)),
   }).strict(),
@@ -72,6 +69,8 @@ export const shellSchema = z.object({
     appearance: text,
     seeAll: text,
     social: text,
+    // The name of each social network Configuration may list, for screen readers.
+    networks: z.record(z.string(), text),
     theme: text,
     colourMode: text,
     modeSystem: text,
@@ -98,7 +97,6 @@ export const shellSchema = z.object({
   footer: z.object({
     copyright: text,
     links: z.array(shellLinkSchema),
-    social: z.array(shellLinkSchema.required({ icon: true })),
   }).strict(),
   home: z.object({
     title: text,

@@ -1,6 +1,9 @@
 export default defineNuxtConfig({
-  // Theme Manager, pinned in package.json to its v0.2.1 commit.
-  extends: ['@nuxt4-layers/theme-manager'],
+  // Layers, each pinned in package.json to a release commit:
+  // Theme Manager v0.2.1, Configuration v1.2.0.
+  extends: ['@nuxt4-layers/theme-manager', '@nuxt4-layers/configuration'],
+  // Configuration's administration pages wait for sign-in and approvals (slice 1c).
+  configuration: { pages: { enabled: false } },
   compatibilityDate: '2026-10-01',
   devtools: { enabled: false },
   css: ['~/assets/css/main.css'],

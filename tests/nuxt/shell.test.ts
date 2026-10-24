@@ -16,7 +16,6 @@ import shellData from '~~/data/shell.json'
 // Altered copies of the real data prove each label comes from data, not code.
 const real = shellData as Shell
 const shell: Shell = structuredClone(real)
-shell.site.name = 'Test Isles'
 shell.header.links = [{ label: 'Harbour', to: '/harbour' }]
 shell.header.signIn = { label: 'Log on', to: '/sign-in' }
 shell.home.panels = [
@@ -33,6 +32,16 @@ shell.themes.order = ['isles-winter', 'isles-summer']
 shell.comingSoon = [{ path: '/harbour', title: 'Harbour' }, { path: '/sign-in', title: 'Log on' }]
 
 registerEndpoint('/api/shell', () => shell)
+// Configuration's public values, altered to prove the shell draws them.
+registerEndpoint('/api/configuration/public', () => ({
+  values: {
+    'site.name': 'Test Isles',
+    'site.tagline': 'Small and windy',
+    'site.default-locale': 'en-GB',
+    'social.links': [{ network: 'mastodon', url: 'https://mastodon.example/@isles' }],
+  },
+  provenance: {},
+}))
 registerEndpoint('/api/themes', () => [
   { id: 'isles-summer', name: 'Isles Summer', version: '1.0.0', ownership: { ownerType: 'user', ownerId: 'a' }, visibility: 'public', lifecycle: 'published' },
   { id: 'isles-winter', name: 'Isles Winter', version: '1.0.0', ownership: { ownerType: 'user', ownerId: 'a' }, visibility: 'public', lifecycle: 'published' },
@@ -42,7 +51,7 @@ const { useRoute } = vi.hoisted(() => ({ useRoute: vi.fn(() => ({ path: '/harbou
 mockNuxtImport('useRoute', () => useRoute)
 
 async function withShell() {
-  await loadShell()
+  await Promise.all([loadShell(), loadSite()])
 }
 
 afterEach(() => {
@@ -54,6 +63,7 @@ describe('shell components', () => {
     await withShell()
     const header = await mountSuspended(SiteHeader, { props: { menuOpen: false } })
     expect(header.text()).toContain('Test Isles')
+    expect(header.text()).toContain('Small and windy')
     expect(header.find('nav a').text()).toBe('Harbour')
     expect(header.find('nav a').attributes('href')).toBe('/harbour')
     expect(header.find('a[href="/sign-in"]').text()).toBe('Log on')
@@ -119,7 +129,8 @@ describe('shell components', () => {
     await withShell()
     const footer = await mountSuspended(SiteFooter)
     expect(footer.text()).toContain('© Test Isles')
-    expect(footer.find('a[href^="https://github.com/"]').text()).toBe(real.footer.social[0]!.label)
+    const social = footer.find('a[href="https://mastodon.example/@isles"]')
+    expect(social.text()).toBe(real.labels.networks.mastodon)
   })
 
   it('theme picker lists the visible themes in the shell order', async () => {

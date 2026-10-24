@@ -15,6 +15,7 @@
 | Home page | A panelled dashboard, after the mock-up: a panel for each section (What's on, News, Community, Market) and for the noticeboard, photo of the week and poll, each saying what is coming until its slice fills it |
 | Header and footer | The header links to the sections and holds Appearance (palette and colour mode) and Sign in; every label and link is read from [`data/shell.json`](data/shell.json); responsive from phone to desktop |
 | Side menu | For signed-in members only, so hidden until sign-in arrives with slice 1c |
+| Site facts | The name, tagline, locale, default theme, title template, description and social links come from [Configuration](https://github.com/nuxt4-layers/configuration/tree/v1.2.0), set in `data/configuration.json` |
 | Themes | Four seasonal palettes (Spring, Summer, Autumn and Winter) stored by [Theme Manager](https://github.com/nuxt4-layers/theme-manager/tree/v0.2.1), meeting WCAG 2.2 AA contrast in light and dark; visitors choose a palette and a colour mode |
 | Pages | Every page beyond the home page says "coming soon" |
 
@@ -46,7 +47,7 @@ Westray-Papa-Westray draws every screen itself and composes headless `nuxt4-laye
 | [`profile`](https://github.com/nuxt4-layers/profile) | People's own details, under their control |
 | [`authorisation`](https://github.com/nuxt4-layers/authorisation) | Roles and access decisions |
 | [`publisher`](https://github.com/nuxt4-layers/publisher) | Pages, articles, events and notices |
-| [`configuration`](https://github.com/nuxt4-layers/configuration) | Site facts, contact details and links |
+| [`configuration`](https://github.com/nuxt4-layers/configuration/tree/v1.2.0) | Site facts, contact details and links. Composed now, at its `v1.2.0` commit |
 | [`theme-manager`](https://github.com/nuxt4-layers/theme-manager/tree/v0.2.1) | Themes, light and dark mode. Composed now, at its `v0.2.1` commit |
 
 Everything a visitor reads is data: text, menus, themes and settings come from these capabilities, never from code.
@@ -118,7 +119,7 @@ It holds two settings:
 
 | Variable | Default | Meaning |
 |---|---|---|
-| `DATABASE_URL` | `postgres://westray-papa-westray:westray-papa-westray@localhost:5432/westray-papa-westray` | The PostgreSQL database the site, migrations and seeding use. The default matches the container in `compose.yaml`. Without it the site still runs, on Theme Manager's built-in default theme |
+| `DATABASE_URL` | `postgres://westray-papa-westray:westray-papa-westray@localhost:5432/westray-papa-westray` | The PostgreSQL database the site, migrations and seeding use; required. The default matches the container in `compose.yaml` |
 | `PLATFORM_SUPER_ADMIN_ID` | `00000000-0000-4000-8000-000000000001` | The platform super admin's account id. Seeded data, such as the example themes, belongs to this account; Identity creates the account with this id in slice 1c |
 
 To use a PostgreSQL 16 you already run instead of Docker, create a database and a user for it, and point `DATABASE_URL` at them. Then skip `pnpm db:up` below.
@@ -243,6 +244,7 @@ function repoProvision {
 | `ERR_PNPM_GIT_DEP_PREPARE_NOT_ALLOWED` | Theme Manager is installed from GitHub and runs its `prepare` script. `pnpm-workspace.yaml` allows it for the pinned commit only; when the commit in `package.json` changes, change it there too |
 | Appearance has no palette picker, and the site is in blue-grey | Theme Manager could not reach stored themes, so its built-in default applies: start the database and run `pnpm db:migrate` and `pnpm db:seed` |
 | `password authentication failed for user "westray-papa-westray"` | Your local database was created before the user, password and database were renamed from `westray`; PostgreSQL only sets them when its volume is first created. `pnpm db:up` now makes a fresh volume, as `compose.yaml` fixes the project name; if the old container still holds port 5432, stop it in Docker Desktop or with `docker ps` and `docker stop`, then run `pnpm db:up` and `pnpm db:migrate` again. Remove the old volume when you no longer need it: `docker volume ls` lists it with a `postgres-data` suffix |
+| Every page answers 503 | The site cannot reach its database, which Configuration needs for every page: start it with `pnpm db:up` |
 | `ECONNREFUSED 127.0.0.1:5432` | The database is not running: `pnpm db:up`, and check Docker Desktop is started |
 | `pnpm db:up` says port 5432 is already allocated | Another PostgreSQL is using the port. Stop it, or change the left-hand port in `compose.yaml` and in `DATABASE_URL` to match, such as `5433` |
 | Port 3000 is in use | Run `pnpm dev --port 3001` |
@@ -251,11 +253,13 @@ function repoProvision {
 
 | Path | Holds |
 |---|---|
-| `data/shell.json` | Site name, labels, header links, the members' side menu, the footer, the home page's text and dashboard panels, the default theme and the pages still to come. Configuration and Publisher replace it in slice 1b |
+| `data/configuration.json` | The site's facts, as Configuration deployment values: name, tagline, locale, default theme, title template, description and social links. Administrators can override them at the platform scope once sign-in arrives in slice 1c |
+| `data/shell.json` | Labels, header links, the members' side menu, the footer, the home page's text and dashboard panels, the theme picker's order and the pages still to come. Publisher takes over the content in the rest of slice 1b |
 | `data/themes/` | The four seasonal palettes, generated by `scripts/themes/generate.ts` |
 | `shared/shell.ts`, `shared/icons.ts` | The schema that data must meet, and the icons it may name |
 | `app/` | Layout, components and pages, styled only with Theme Manager's semantic classes (`bg-fill-*`, `text-pen-*`, `border-edge-*`) |
 | `server/api/shell.get.ts` | Serves the shell data through a port that slice 1b re-points |
+| `server/plugins/configuration.ts` | Connects Configuration to PostgreSQL (its own `configuration` schema, migrated at start-up) and supplies the deployment values; its administration pages stay off until slice 1c |
 | `server/plugins/theme-manager.ts` | Connects Theme Manager to PostgreSQL (`server/utils/theme-store.ts`) and to the access policy (`server/utils/theme-policy.ts`): anyone may see and use public themes, and every change is refused until Authorisation arrives in slice 1c |
 | `server/database/` | Migration runner, migrations and seeding |
 

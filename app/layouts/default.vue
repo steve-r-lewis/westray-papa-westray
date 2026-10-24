@@ -1,13 +1,16 @@
 <script setup lang="ts">
 const shell = useShell()
+const site = useSite()
 const member = useMember()
 const menuOpen = ref(false)
 
 // Here rather than in app.vue so the error page, which replaces app.vue, gets it too.
 useHead({
-  htmlAttrs: { lang: () => shell.value.site.locale },
+  htmlAttrs: { lang: () => site.value.locale },
   bodyAttrs: { class: 'bg-fill-floor-default text-pen-floor-default' },
-  titleTemplate: title => title ? `${title} | ${shell.value.site.name}` : shell.value.site.name,
+  // Configuration's seo.title-template places the page title; the home page is just the name.
+  titleTemplate: title => title && site.value.titleTemplate ? site.value.titleTemplate.replace('%s', title) : site.value.name,
+  meta: [{ name: 'description', content: () => site.value.description }],
 })
 </script>
 
