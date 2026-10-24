@@ -13,7 +13,8 @@ node_modules
 logs
 *.log
 
-# Local environment
+# Local environment, and the email MAIL_TRANSPORT=directory writes
+.mail
 .env
 .env.*
 !.env.example

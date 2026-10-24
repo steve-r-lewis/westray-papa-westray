@@ -1,7 +1,7 @@
 import { fetch, setup } from '@nuxt/test-utils/e2e'
 import { describe, expect, it } from 'vitest'
 import { readContentFiles } from '../../server/database/content-files'
-import { root, testDatabase } from './support'
+import { root, testSite } from './support'
 
 // The pre-launch demonstration, built and run as its deployment would be: the
 // banner on every page, nothing indexed, and the invented content listed.
@@ -10,13 +10,14 @@ import { root, testDatabase } from './support'
 const url = process.env.DATABASE_URL
 
 if (url) {
-  const database = await testDatabase('demo', [...await readContentFiles(`${root}data/content`), ...await readContentFiles(`${root}data/demo`)])
+  const site = await testSite('demo', [...await readContentFiles(`${root}data/content`), ...await readContentFiles(`${root}data/demo`)], { DEMO_MODE: 'true', DEMO_LAUNCH_DATE: '2027-04-01' })
   await setup({
     rootDir: root,
     server: true,
     build: true,
     setupTimeout: 600_000,
-    env: { DATABASE_URL: database, DEMO_MODE: 'true', DEMO_LAUNCH_DATE: '2027-04-01' },
+    port: site.port,
+    env: site.env,
   })
 }
 

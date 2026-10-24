@@ -2,7 +2,7 @@ import { readdirSync, readFileSync } from 'node:fs'
 import { fetch, setup } from '@nuxt/test-utils/e2e'
 import { describe, expect, it } from 'vitest'
 import { readContentFiles, resolveWhen } from '../../server/database/content-files'
-import { root, testDatabase } from './support'
+import { Browser, root, signUpMember, testSite } from './support'
 
 // Canary leak tests. Content nobody may see anonymously (drafts, scheduled and
 // archived documents, a published document's newer draft, and members' notices)
@@ -10,6 +10,8 @@ import { root, testDatabase } from './support'
 // holding that content beside the real pages, and anonymous requests to every page,
 // API, feed, sitemap and error response must never show any canary. A hidden
 // document's address must also answer exactly as an address that never held one.
+// Both hold again for a signed-in member who holds no role: signing in grants nothing
+// until a role does.
 //
 // Needs DATABASE_URL, as a role that may create databases; skipped without it.
 
@@ -33,22 +35,29 @@ const MISSING = '/never-anything-here'
 
 const url = process.env.DATABASE_URL
 
+let site: Awaited<ReturnType<typeof testSite>>
 if (url) {
-  const database = await testDatabase('canary', [...await readContentFiles(`${root}data/content`), ...await readContentFiles(fixtures)])
+  site = await testSite('canary', [...await readContentFiles(`${root}data/content`), ...await readContentFiles(fixtures)])
   await setup({
     rootDir: root,
     server: true,
     build: true,
     setupTimeout: 600_000,
-    env: { DATABASE_URL: database, DEMO_MODE: 'false' },
+    port: site.port,
+    env: site.env,
   })
 }
 
 interface Answer { path: string, status: number, headers: string, body: string }
 
+// Who is asking: nobody, or a member's signed-in browser.
+type Reader = Browser | null
+
 // As a browser asks (an error is then an HTML page), or as a script does (JSON).
-async function get(path: string, accept = '*/*'): Promise<Answer> {
-  const response = await fetch(path, { redirect: 'manual', headers: { accept } })
+async function get(path: string, accept = '*/*', reader: Reader = null): Promise<Answer> {
+  const response = reader
+    ? await reader.request(path, { accept })
+    : await fetch(path, { redirect: 'manual', headers: { accept } })
   const headers = [...response.headers].map(([name, value]) => `${name}: ${value}`).join('\n')
   return { path, status: response.status, headers, body: await response.text() }
 }
@@ -70,12 +79,9 @@ function linksIn(body: string): string[] {
   return [...found]
 }
 
-describe.skipIf(!url)('anonymous readers never see hidden content', () => {
-  it('has canaries to look for', () => {
-    expect(canaries.length).toBeGreaterThanOrEqual(9)
-  })
-
+function neverShowsHiddenContent(reader: () => Promise<Reader>) {
   it('on any page, API, feed, sitemap or error response', { timeout: 300_000 }, async () => {
+    const who = await reader()
     const start = [
       '/', '/about', '/contact', '/policies', '/news', '/articles', '/blog', '/whats-on', '/events', '/workshops', '/creative-trail',
       '/sitemap.xml', '/robots.txt', '/.well-known/security.txt',
@@ -96,9 +102,9 @@ describe.skipIf(!url)('anonymous readers never see hidden content', () => {
       const path = queue.shift()!
       if (seen.has(path)) continue
       seen.add(path)
-      const answer = await get(path, 'text/html')
+      const answer = await get(path, 'text/html', who)
       expectNoCanary(answer)
-      expectNoCanary(await get(path))
+      expectNoCanary(await get(path, '*/*', who))
       if (answer.status === 200) queue.push(...linksIn(answer.body).filter(link => !seen.has(link)))
       // Every published document is also asked for through the content API.
       if (path.endsWith('.xml')) queue.push(...linksIn(answer.body).map(link => `/api/content/resolve?path=${link}`))
@@ -107,18 +113,20 @@ describe.skipIf(!url)('anonymous readers never see hidden content', () => {
     expect(seen).toContain('/policies/privacy-policy')
     expect(seen).toContain('/events/public-event')
     for (const path of start.filter(path => path.startsWith('/api/publisher/'))) {
-      expect((await get(path)).status, path).toBe(404)
+      expect((await get(path, '*/*', who)).status, path).toBe(404)
     }
   })
 
   it('shows the published version of a document with a newer draft', async () => {
-    const page = await get((await get('/api/content/listing?section=/articles')).body.match(/"path":\s*"([^"]+published-with-draft)"/)![1]!)
+    const who = await reader()
+    const page = await get((await get('/api/content/listing?section=/articles', '*/*', who)).body.match(/"path":\s*"([^"]+published-with-draft)"/)![1]!, '*/*', who)
     expect(page.status).toBe(200)
     expect(page.body).toContain('A published article')
     expectNoCanary(page)
   })
 
   it('answers a hidden document exactly as a missing one', async () => {
+    const who = await reader()
     const same = (answer: Answer) => {
       // The address asked for is the one thing that may differ, as written or as a
       // page's payload escapes it.
@@ -131,16 +139,38 @@ describe.skipIf(!url)('anonymous readers never see hidden content', () => {
     }
     for (const accept of ['text/html', '*/*']) {
       for (const prefix of ['', '/api/content/resolve?path=']) {
-        const missing = same(await get(`${prefix}${MISSING}`, accept))
+        const missing = same(await get(`${prefix}${MISSING}`, accept, who))
         expect(missing.status).toBe(404)
         for (const path of hidden) {
-          expect(same(await get(`${prefix}${path}`, accept)), `${accept} ${prefix}${path}`).toEqual(missing)
+          expect(same(await get(`${prefix}${path}`, accept, who)), `${accept} ${prefix}${path}`).toEqual(missing)
         }
       }
     }
-    const noFeed = same(await get('/feeds/nothing/rss'))
+    const noFeed = same(await get('/feeds/nothing/rss', '*/*', who))
     for (const type of ['members-notice', 'page']) {
-      expect(same(await get(`/feeds/${type}/rss`)), type).toEqual(noFeed)
+      expect(same(await get(`/feeds/${type}/rss`, '*/*', who)), type).toEqual(noFeed)
     }
   })
+}
+
+describe.skipIf(!url)('anonymous readers never see hidden content', () => {
+  it('has canaries to look for', () => {
+    expect(canaries.length).toBeGreaterThanOrEqual(9)
+  })
+
+  neverShowsHiddenContent(async () => null)
+})
+
+describe.skipIf(!url)('a signed-in member with no roles never sees hidden content', () => {
+  let member: Promise<Browser> | undefined
+  // Signed up once, through the site, with the second step done.
+  const signedIn = () => (member ??= signUpMember(site, 'member@example.org', 'a long passphrase for the canary tests').then(({ browser }) => browser))
+
+  it('is signed in as a member', async () => {
+    const page = await get('/account', 'text/html', await signedIn())
+    expect(page.status).toBe(200)
+    expect(page.body).toContain('id="site-menu"')
+  })
+
+  neverShowsHiddenContent(signedIn)
 })

@@ -1,0 +1,10 @@
+{
+  "tenant": {
+    "externalId": "westray-papa-westray",
+    "jurisdiction": "uk-gdpr",
+    "dataRegion": "uk"
+  },
+  "platformGroup": {
+    "name": "Westray-Papa-Westray platform"
+  }
+}
