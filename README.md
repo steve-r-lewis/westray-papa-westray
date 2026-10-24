@@ -66,7 +66,7 @@ These steps take a new machine to the site running at `http://localhost:3000`. C
 | Tool | Version | Check with | Why |
 |---|---|---|---|
 | [Git](https://git-scm.com/downloads) | Any recent | `git --version` | To clone the repository |
-| [Node.js](https://nodejs.org/) | 22.18 or later (22 LTS recommended) | `node --version` | Runs Nuxt; 22.18 is the first to run the TypeScript migration script directly |
+| [Node.js](https://nodejs.org/) | 22.18 or later; `.node-version` names the one in use, which `fnm` and similar switch to on entering the folder | `node --version` | Runs Nuxt; 22.18 is the first to run the TypeScript migration script directly |
 | [Docker](https://docs.docker.com/get-started/get-docker/) with Compose v2 (Docker Desktop on Windows and macOS) | Any recent | `docker compose version` | Runs the local PostgreSQL 16. Not needed if you already have PostgreSQL 16; see step 5 |
 
 pnpm itself is not installed by hand: corepack downloads the exact version that `package.json` pins (12.5.1) and checks it against the hash there.
@@ -166,6 +166,51 @@ DATABASE_URL=postgres://westray-papa-westray:westray-papa-westray@localhost:5432
 ```
 
 All tests should pass. CI runs these same checks on every pull request.
+
+### Keeping a test copy in line with GitHub
+
+Development happens on GitHub; a local copy is for testing what is there. After each pull (or `repoRefresh`), one command brings everything else into line:
+
+```powershell
+./scripts/provision.ps1           # or repoProvision, with the profile function below
+```
+
+It needs PowerShell 7 (on macOS or Linux, `pwsh`). Each step checks first and changes only what is out of date, so it is safe to run every time:
+
+| Step | Does |
+|---|---|
+| Node | Stops unless Node meets `engines.node` in `package.json` |
+| Corepack | Offers to install corepack 0.36.0 if it is missing or older than 0.35, then `corepack enable` if `pnpm` is not the pinned version |
+| `.env` | Overwrites it from `.env.example`, so it matches the commit; a previous `.env` that differed is kept as `.env.previous` |
+| Docker | When `DATABASE_URL` is the local container, checks Docker is running, and on Windows offers to start Docker Desktop and waits for it |
+| Packages | `pnpm install --frozen-lockfile` |
+| Database | Starts the container and waits until it is healthy, then `pnpm db:migrate` and `pnpm db:seed --update`, which overwrites seeded rows with the repository's versions |
+
+| Switch | Effect |
+|---|---|
+| `-Status` | Report every step and change nothing |
+| `-DryRun` | Show what each step would do and change nothing |
+| `-Check` | Also run the type check and the tests, including the database tests |
+| `-ResetData` | Delete the local database and its data first, then rebuild it |
+| `-Force` | Answer yes to every question (installing corepack, starting Docker Desktop, deleting data) |
+| `-Help` or `/h` | Show the help |
+
+Because `.env` is overwritten, put nothing in it by hand; settings belong in `.env.example`.
+
+To run it as `repoProvision` from anywhere in a repository that has one, add this beside `repoRefresh` in your PowerShell profile:
+
+```powershell
+# Runs the current repository's own scripts/provision.ps1, so the steps always match its commit.
+function repoProvision {
+    $root = git rev-parse --show-toplevel 2>$null
+    if (-not $root) { throw 'Not inside a Git repository.' }
+    $script = Join-Path $root 'scripts/provision.ps1'
+    if (-not (Test-Path -LiteralPath $script -PathType Leaf)) { throw "This repository has no scripts/provision.ps1: $root" }
+    # A string '-Help' would arrive as a value, not a switch, so /h calls -Help directly.
+    if ($args.Count -gt 0 -and $args[0] -eq '/h') { & $script -Help; return }
+    & $script @args
+}
+```
 
 ### Everyday commands
 
