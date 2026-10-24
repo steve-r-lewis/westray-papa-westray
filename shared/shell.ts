@@ -25,6 +25,19 @@ export const shellMenuGroupSchema = z.object({
   items: z.array(shellLinkSchema).min(1),
 }).strict()
 
+// A dashboard panel on the home page: one per section of the site, or a feature of
+// its own. A panel whose content is not built yet shows its links and says so.
+export const homePanelSchema = z.object({
+  title: text,
+  description: text,
+  icon: z.enum(iconNames),
+  // The section's own page, for the panel's "See all" link.
+  to: href.optional(),
+  links: z.array(shellLinkSchema),
+  // Wide panels span two columns on large screens.
+  wide: z.boolean().optional(),
+}).strict()
+
 // A page whose capability is not built yet says so; nothing is mocked.
 // Each slice removes its pages from this list as it builds them.
 export const comingSoonPageSchema = z.object({
@@ -56,7 +69,8 @@ export const shellSchema = z.object({
     footerNavigation: text,
     share: text,
     linkCopied: text,
-    siteMap: text,
+    appearance: text,
+    seeAll: text,
     social: text,
     theme: text,
     colourMode: text,
@@ -75,10 +89,6 @@ export const shellSchema = z.object({
     links: z.array(shellLinkSchema),
     signIn: shellLinkSchema,
   }).strict(),
-  // Every public page, grouped: the footer's site map.
-  navigation: z.object({
-    groups: z.array(shellMenuGroupSchema).min(1),
-  }).strict(),
   // The side menu, for signed-in members only. It grows as members' features arrive.
   menu: z.object({
     groups: z.array(shellMenuGroupSchema).min(1),
@@ -95,6 +105,7 @@ export const shellSchema = z.object({
     heading: text,
     intro: text,
     actions: z.array(shellLinkSchema).max(2),
+    panels: z.array(homePanelSchema).min(1),
   }).strict(),
   comingSoon: z.array(comingSoonPageSchema),
 }).strict().superRefine((shell, context) => {

@@ -14,7 +14,7 @@ function allLinks(data: Shell) {
   return [
     ...data.header.links,
     data.header.signIn,
-    ...data.navigation.groups.flatMap(group => group.items),
+    ...data.home.panels.flatMap(panel => [...panel.links, ...(panel.to ? [{ label: panel.title, to: panel.to }] : [])]),
     ...data.menu.groups.flatMap(group => group.items),
     ...data.menu.footer,
     ...data.footer.links,

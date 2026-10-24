@@ -45,8 +45,8 @@ Done in slice 1a, on Theme Manager `v0.2.1`:
 | Ownership | Seeded as the platform super admin's themes (`ownerType: user`), published and `public`. Theme Manager accepts `shared` but gives it no meaning, so `public` is what offers them to everyone |
 | Storage | A `themes` table holding the canonical Theme JSON, behind Theme Manager's repository port |
 | Access | Until Authorisation is composed, anyone may read and use public themes and every change is refused. Theme Manager's management pages are not exposed |
-| Choosing | A palette picker and a System, Light and Dark switch in the header. A visitor gets a cookie only by choosing; until then the site's default theme (Spring) applies |
-| Members | The side menu is for signed-in members only; the public site map is in the footer |
+| Choosing | A palette picker and a System, Light and Dark switch, behind one Appearance button in the header. A visitor gets a cookie only by choosing; until then the site's default theme (Spring) applies |
+| Members | The side menu is for signed-in members only; the public sections are the header's links and the home page's dashboard panels |
 
 Theme Manager 1.0 adds what groups need. These are proposals for its contract:
 

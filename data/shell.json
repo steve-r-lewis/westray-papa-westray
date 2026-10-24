@@ -30,7 +30,8 @@
     "footerNavigation": "Footer",
     "share": "Share",
     "linkCopied": "Link copied",
-    "siteMap": "Site map",
+    "appearance": "Appearance",
+    "seeAll": "See all",
     "social": "Elsewhere",
     "theme": "Palette",
     "colourMode": "Colour mode",
@@ -49,19 +50,28 @@
     "links": [
       {
         "label": "Home",
-        "to": "/"
+        "to": "/",
+        "icon": "home"
       },
       {
-        "label": "Marketplace",
-        "to": "/market"
+        "label": "News",
+        "to": "/news",
+        "icon": "article"
       },
       {
-        "label": "Shopping",
-        "to": "/shop"
+        "label": "What's on",
+        "to": "/whats-on",
+        "icon": "calendar"
       },
       {
-        "label": "Events",
-        "to": "/events"
+        "label": "Community",
+        "to": "/community",
+        "icon": "users"
+      },
+      {
+        "label": "Market",
+        "to": "/market",
+        "icon": "market"
       }
     ],
     "signIn": {
@@ -69,110 +79,6 @@
       "to": "/sign-in",
       "icon": "sign-in"
     }
-  },
-  "navigation": {
-    "groups": [
-      {
-        "label": "Information",
-        "items": [
-          {
-            "label": "Home",
-            "to": "/",
-            "icon": "home"
-          },
-          {
-            "label": "About",
-            "to": "/about",
-            "icon": "info"
-          },
-          {
-            "label": "Policies",
-            "to": "/policies",
-            "icon": "policy"
-          },
-          {
-            "label": "Contact",
-            "to": "/contact",
-            "icon": "mail"
-          }
-        ]
-      },
-      {
-        "label": "News",
-        "items": [
-          {
-            "label": "Articles",
-            "to": "/articles",
-            "icon": "article"
-          },
-          {
-            "label": "Blog",
-            "to": "/blog",
-            "icon": "blog"
-          }
-        ]
-      },
-      {
-        "label": "What's on",
-        "items": [
-          {
-            "label": "Events",
-            "to": "/events",
-            "icon": "calendar"
-          },
-          {
-            "label": "Workshops",
-            "to": "/workshops",
-            "icon": "workshop"
-          },
-          {
-            "label": "Creative Trail",
-            "to": "/creative-trail",
-            "icon": "trail"
-          }
-        ]
-      },
-      {
-        "label": "Community",
-        "items": [
-          {
-            "label": "Clubs",
-            "to": "/clubs",
-            "icon": "users"
-          },
-          {
-            "label": "Committees",
-            "to": "/committees",
-            "icon": "committee"
-          },
-          {
-            "label": "Organisations",
-            "to": "/organisations",
-            "icon": "organisation"
-          },
-          {
-            "label": "Businesses",
-            "to": "/businesses",
-            "icon": "business"
-          }
-        ]
-      },
-      {
-        "label": "Market",
-        "items": [
-          {
-            "label": "Market",
-            "to": "/market",
-            "icon": "market"
-          },
-          {
-            "label": "Shop",
-            "to": "/shop",
-            "icon": "shop"
-          }
-        ]
-      }
-    ]
   },
   "menu": {
     "groups": [
@@ -242,6 +148,115 @@
       {
         "label": "See Community Events",
         "to": "/events"
+      }
+    ],
+    "panels": [
+      {
+        "title": "What's on",
+        "description": "Events, workshops and the Creative Trail across both islands.",
+        "icon": "calendar",
+        "to": "/whats-on",
+        "links": [
+          {
+            "label": "Events",
+            "to": "/events",
+            "icon": "calendar"
+          },
+          {
+            "label": "Workshops",
+            "to": "/workshops",
+            "icon": "workshop"
+          },
+          {
+            "label": "Creative Trail",
+            "to": "/creative-trail",
+            "icon": "trail"
+          }
+        ],
+        "wide": true
+      },
+      {
+        "title": "News",
+        "description": "Island news and blog posts from the community.",
+        "icon": "article",
+        "to": "/news",
+        "links": [
+          {
+            "label": "Articles",
+            "to": "/articles",
+            "icon": "article"
+          },
+          {
+            "label": "Blog",
+            "to": "/blog",
+            "icon": "blog"
+          }
+        ]
+      },
+      {
+        "title": "Community",
+        "description": "Clubs, committees, organisations and businesses on Westray and Papa Westray.",
+        "icon": "users",
+        "to": "/community",
+        "links": [
+          {
+            "label": "Clubs",
+            "to": "/clubs",
+            "icon": "users"
+          },
+          {
+            "label": "Committees",
+            "to": "/committees",
+            "icon": "committee"
+          },
+          {
+            "label": "Organisations",
+            "to": "/organisations",
+            "icon": "organisation"
+          },
+          {
+            "label": "Businesses",
+            "to": "/businesses",
+            "icon": "business"
+          }
+        ],
+        "wide": true
+      },
+      {
+        "title": "Market",
+        "description": "Local shops, produce, crafts and services.",
+        "icon": "market",
+        "to": "/market",
+        "links": [
+          {
+            "label": "Market",
+            "to": "/market",
+            "icon": "market"
+          },
+          {
+            "label": "Shop",
+            "to": "/shop",
+            "icon": "shop"
+          }
+        ]
+      },
+      {
+        "title": "Noticeboard",
+        "description": "Lifts, lost and found, things for sale and things to give away, posted by members.",
+        "icon": "noticeboard",
+        "links": []
+      },
+      {
+        "title": "Photo of the week",
+        "description": "A picture of island life, chosen each week.",
+        "icon": "camera",
+        "links": []
+      },
+      {
+        "title": "Community poll",
+        "description": "Have your say on island questions.",
+        "icon": "poll",
+        "links": []
       }
     ]
   },
@@ -317,6 +332,18 @@
     {
       "path": "/account/security",
       "title": "Security"
+    },
+    {
+      "path": "/news",
+      "title": "News"
+    },
+    {
+      "path": "/whats-on",
+      "title": "What's on"
+    },
+    {
+      "path": "/community",
+      "title": "Community"
     }
   ]
 }

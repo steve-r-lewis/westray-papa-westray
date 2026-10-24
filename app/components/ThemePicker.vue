@@ -28,11 +28,10 @@ async function choose(id: string) {
 </script>
 
 <template>
-  <label v-if="ordered.length" class="flex items-center gap-2 text-sm">
-    <AppIcon name="palette" />
-    <span class="sr-only 2xl:not-sr-only">{{ shell.labels.theme }}</span>
+  <label v-if="ordered.length" class="flex flex-col gap-2 text-sm">
+    <span class="font-semibold">{{ shell.labels.theme }}</span>
     <select
-      class="rounded-control border border-edge-input-default bg-fill-input-default px-2 py-1 text-pen-input-default hover:border-edge-input-hover hover:bg-fill-input-hover"
+      class="w-full rounded-control border border-edge-input-default bg-fill-input-default px-2 py-1.5 text-base text-pen-input-default hover:border-edge-input-hover hover:bg-fill-input-hover"
       :value="runtime.selectedThemeId.value ?? runtime.activeTheme.value?.id ?? ''"
       @change="choose(($event.target as HTMLSelectElement).value)"
     >

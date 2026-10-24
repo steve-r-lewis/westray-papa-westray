@@ -1,13 +1,16 @@
 import { mockNuxtImport, mountSuspended, registerEndpoint } from '@nuxt/test-utils/runtime'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { Shell } from '#shared/shell'
+import AppearanceMenu from '~/components/AppearanceMenu.vue'
 import ColourModeSwitch from '~/components/ColourModeSwitch.vue'
+import HomePanel from '~/components/HomePanel.vue'
 import SiteFooter from '~/components/SiteFooter.vue'
 import SiteHeader from '~/components/SiteHeader.vue'
 import SiteMenu from '~/components/SiteMenu.vue'
 import ThemePicker from '~/components/ThemePicker.vue'
 import DefaultLayout from '~/layouts/default.vue'
 import ComingSoon from '~/pages/[...slug].vue'
+import HomePage from '~/pages/index.vue'
 import shellData from '~~/data/shell.json'
 
 // Altered copies of the real data prove each label comes from data, not code.
@@ -16,7 +19,12 @@ const shell: Shell = structuredClone(real)
 shell.site.name = 'Test Isles'
 shell.header.links = [{ label: 'Harbour', to: '/harbour' }]
 shell.header.signIn = { label: 'Log on', to: '/sign-in' }
-shell.navigation.groups = [{ label: 'Around', items: [{ label: 'Harbour', to: '/harbour', icon: 'trail' }] }]
+shell.home.panels = [
+  { title: 'Around the isles', description: 'Places to go.', icon: 'trail', to: '/harbour', links: [{ label: 'Harbour', to: '/harbour', icon: 'trail' }], wide: true },
+  { title: 'Gossip', description: 'Not built yet.', icon: 'poll', links: [] },
+]
+shell.labels.appearance = 'Look'
+shell.labels.seeAll = 'More'
 shell.menu.groups = [{ label: 'Places', items: [{ label: 'Harbour', to: '/harbour' }] }]
 shell.footer.copyright = '© Test Isles'
 shell.labels.comingSoonTitle = 'Not yet'
@@ -72,11 +80,44 @@ describe('shell components', () => {
     expect(menu.text()).toContain('Buy me a Coffee')
   })
 
-  it('footer draws the site map, its text and links from data', async () => {
+  it('home page draws a panel for each entry in the data', async () => {
+    await withShell()
+    const page = await mountSuspended(HomePage)
+    expect(page.findAll('section h2').map(heading => heading.text())).toEqual(['Around the isles', 'Gossip'])
+  })
+
+  it('a panel shows its links, says what is coming, and links to its section', async () => {
+    await withShell()
+    const panel = await mountSuspended(HomePanel, { props: { panel: shell.home.panels[0]! } })
+    expect(panel.classes()).toContain('lg:col-span-2')
+    expect(panel.text()).toContain('Not yet')
+    expect(panel.find('ul a').attributes('href')).toBe('/harbour')
+    expect(panel.findAll('a').at(-1)!.text()).toContain('More')
+
+    const empty = await mountSuspended(HomePanel, { props: { panel: shell.home.panels[1]! } })
+    expect(empty.find('ul').exists()).toBe(false)
+    expect(empty.text()).not.toContain('More')
+  })
+
+  it('appearance menu opens to show the palette and colour mode, and closes on Escape', async () => {
+    await withShell()
+    const menu = await mountSuspended(AppearanceMenu, { attachTo: document.body })
+    const button = menu.find('button')
+    expect(button.text()).toContain('Look')
+    expect(button.attributes('aria-expanded')).toBe('false')
+    await button.trigger('click')
+    expect(button.attributes('aria-expanded')).toBe('true')
+    expect(menu.find('select').exists()).toBe(true)
+    expect(menu.find('[role="group"]').exists()).toBe(true)
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+    await nextTick()
+    expect(button.attributes('aria-expanded')).toBe('false')
+    menu.unmount()
+  })
+
+  it('footer draws its text and links from data', async () => {
     await withShell()
     const footer = await mountSuspended(SiteFooter)
-    expect(footer.find('h3').text()).toBe('Around')
-    expect(footer.find('section a').attributes('href')).toBe('/harbour')
     expect(footer.text()).toContain('© Test Isles')
     expect(footer.find('a[href^="https://github.com/"]').text()).toBe(real.footer.social[0]!.label)
   })
