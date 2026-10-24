@@ -13,9 +13,12 @@ useHead({ title: page.title })
 </script>
 
 <template>
-  <section class="card coming-soon" aria-labelledby="page-heading">
-    <h1 id="page-heading">{{ page!.title }}</h1>
-    <p class="badge">{{ shell.labels.comingSoonTitle }}</p>
+  <PageCard :title="page!.title">
+    <p class="mb-3">
+      <span class="inline-block rounded-pill border border-edge-info-default bg-fill-info-default px-3 py-0.5 text-sm font-semibold text-pen-info-default">
+        {{ shell.labels.comingSoonTitle }}
+      </span>
+    </p>
     <p>{{ shell.labels.comingSoonBody }}</p>
-  </section>
+  </PageCard>
 </template>

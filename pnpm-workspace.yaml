@@ -2,6 +2,9 @@
 allowBuilds:
   esbuild: true
   '@parcel/watcher': true
+  # A git-hosted layer runs its `prepare` script (`nuxt prepare`) when installed.
+  # Allowed for this exact pinned commit only.
+  '@nuxt4-layers/theme-manager@git+https://github.com/nuxt4-layers/theme-manager.git#e63274dd0fa8801090252e7f07ecfa4145a3ea6b': true
 
 # Refuse packages published less than a day ago (pnpm 12's default, stated here so
 # every pnpm version that reads this file resolves the lockfile the same way).

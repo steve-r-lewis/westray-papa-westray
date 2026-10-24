@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { iconNames } from './icons'
 
 // The shell is everything around a page: header, side menu and footer.
 // Every label and link in it is data; this schema is the contract that data meets.
@@ -16,6 +17,7 @@ export const shellLinkSchema = z.object({
   to: href,
   // A short line under the label, as on the mock-up's coffee link.
   description: text.optional(),
+  icon: z.enum(iconNames).optional(),
 }).strict()
 
 export const shellMenuGroupSchema = z.object({
@@ -39,6 +41,12 @@ export const shellSchema = z.object({
     locale: z.string().regex(/^[a-z]{2}(?:-[A-Z]{2})?$/),
     logo: z.object({ src: href, alt: z.string() }).strict(),
   }).strict(),
+  themes: z.object({
+    // The theme a visitor sees until they choose one. Configuration takes this over.
+    default: z.string().regex(/^[a-z0-9-]{1,64}$/),
+    // The order the theme picker lists these in; any other public theme follows.
+    order: z.array(z.string().regex(/^[a-z0-9-]{1,64}$/)),
+  }).strict(),
   labels: z.object({
     skipToContent: text,
     openMenu: text,
@@ -48,6 +56,13 @@ export const shellSchema = z.object({
     footerNavigation: text,
     share: text,
     linkCopied: text,
+    siteMap: text,
+    social: text,
+    theme: text,
+    colourMode: text,
+    modeSystem: text,
+    modeLight: text,
+    modeDark: text,
     comingSoonTitle: text,
     comingSoonBody: text,
     notFoundTitle: text,
@@ -60,6 +75,11 @@ export const shellSchema = z.object({
     links: z.array(shellLinkSchema),
     signIn: shellLinkSchema,
   }).strict(),
+  // Every public page, grouped: the footer's site map.
+  navigation: z.object({
+    groups: z.array(shellMenuGroupSchema).min(1),
+  }).strict(),
+  // The side menu, for signed-in members only. It grows as members' features arrive.
   menu: z.object({
     groups: z.array(shellMenuGroupSchema).min(1),
     // Links pinned to the foot of the drawer.
@@ -68,6 +88,7 @@ export const shellSchema = z.object({
   footer: z.object({
     copyright: text,
     links: z.array(shellLinkSchema),
+    social: z.array(shellLinkSchema.required({ icon: true })),
   }).strict(),
   home: z.object({
     title: text,
