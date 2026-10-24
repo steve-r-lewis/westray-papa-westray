@@ -1,0 +1,26 @@
+{
+  "id": "01a17720-ca0c-7b02-a79b-e4a79ebd8a90",
+  "type": "event",
+  "title": "Papa Westray ceilidh",
+  "slug": "papa-westray-ceilidh",
+  "summary": "Music and dancing on the smaller island, with a late boat home.",
+  "published": {
+    "days": -5
+  },
+  "fields": {
+    "startsAt": {
+      "days": 30,
+      "time": "20:00"
+    },
+    "endsAt": {
+      "days": 30,
+      "time": "23:30"
+    },
+    "venue": "Papa Westray Community Centre",
+    "organiser": "Papa Westray ceilidh band"
+  },
+  "dateFields": [
+    "startsAt",
+    "endsAt"
+  ]
+}

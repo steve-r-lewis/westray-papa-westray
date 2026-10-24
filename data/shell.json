@@ -53,7 +53,26 @@
     "notFoundBody": "There is no page at this address.",
     "errorTitle": "Something went wrong",
     "errorBody": "The page could not be shown. Please try again later.",
-    "backHome": "Back to the home page"
+    "backHome": "Back to the home page",
+    "published": "Published",
+    "updated": "Updated",
+    "when": "When",
+    "where": "Where",
+    "organiser": "Run by",
+    "stop": "Stop",
+    "maker": "Maker",
+    "feeds": "Follow by feed",
+    "rss": "RSS",
+    "atom": "Atom",
+    "typeNames": {
+      "article": "Articles",
+      "blog-post": "Blog posts",
+      "event": "Events",
+      "workshop": "Workshops",
+      "creative-trail-stop": "Creative Trail"
+    },
+    "demoBanner": "Pre-launch demonstration: everything here is fictitious; launches on {date}; at launch the site starts empty",
+    "demoDateToBeAnnounced": "a date to be announced"
   },
   "header": {
     "links": [
@@ -175,7 +194,8 @@
             "icon": "trail"
           }
         ],
-        "wide": true
+        "wide": true,
+        "section": "/whats-on"
       },
       {
         "title": "News",
@@ -193,7 +213,8 @@
             "to": "/blog",
             "icon": "blog"
           }
-        ]
+        ],
+        "section": "/news"
       },
       {
         "title": "Community",
@@ -262,39 +283,99 @@
       }
     ]
   },
-  "comingSoon": [
-    {
-      "path": "/about",
-      "title": "About"
+  "contact": {
+    "organisation": "Westray Online is run by",
+    "roles": {
+      "general": "General enquiries",
+      "data-protection": "Data protection officer",
+      "security": "Security"
     },
+    "email": "Email",
+    "phone": "Phone",
+    "web": "Web",
+    "securityTxt": "Security researchers: see our security.txt"
+  },
+  "sections": [
     {
-      "path": "/policies",
-      "title": "Policies"
-    },
-    {
-      "path": "/contact",
-      "title": "Contact"
+      "path": "/news",
+      "title": "News",
+      "intro": "Island news and blog posts from the community.",
+      "types": [
+        "article",
+        "blog-post"
+      ],
+      "order": "latest",
+      "empty": "No news yet.",
+      "feeds": true
     },
     {
       "path": "/articles",
-      "title": "Articles"
+      "title": "Articles",
+      "intro": "News and features from Westray and Papa Westray.",
+      "types": [
+        "article"
+      ],
+      "order": "latest",
+      "empty": "No articles yet.",
+      "feeds": true
     },
     {
       "path": "/blog",
-      "title": "Blog"
+      "title": "Blog",
+      "intro": "Posts from people and groups on the islands.",
+      "types": [
+        "blog-post"
+      ],
+      "order": "latest",
+      "empty": "No blog posts yet.",
+      "feeds": true
+    },
+    {
+      "path": "/whats-on",
+      "title": "What's on",
+      "intro": "Events and workshops coming up on both islands.",
+      "types": [
+        "event",
+        "workshop"
+      ],
+      "order": "upcoming",
+      "empty": "Nothing is listed yet.",
+      "feeds": true
     },
     {
       "path": "/events",
-      "title": "Events"
+      "title": "Events",
+      "intro": "Concerts, dances, regattas, talks and gatherings coming up.",
+      "types": [
+        "event"
+      ],
+      "order": "upcoming",
+      "empty": "No events are listed yet.",
+      "feeds": true
     },
     {
       "path": "/workshops",
-      "title": "Workshops"
+      "title": "Workshops",
+      "intro": "Learn a craft or a skill from people on the islands.",
+      "types": [
+        "workshop"
+      ],
+      "order": "upcoming",
+      "empty": "No workshops are listed yet.",
+      "feeds": true
     },
     {
       "path": "/creative-trail",
-      "title": "Creative Trail"
-    },
+      "title": "Creative Trail",
+      "intro": "Studios, workshops and makers to visit across the islands, stop by stop.",
+      "types": [
+        "creative-trail-stop"
+      ],
+      "order": "trail",
+      "empty": "The trail has no stops yet."
+    }
+  ],
+  "comingSoon": [
     {
       "path": "/clubs",
       "title": "Clubs"
@@ -334,14 +415,6 @@
     {
       "path": "/account/security",
       "title": "Security"
-    },
-    {
-      "path": "/news",
-      "title": "News"
-    },
-    {
-      "path": "/whats-on",
-      "title": "What's on"
     },
     {
       "path": "/community",

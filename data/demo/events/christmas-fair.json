@@ -1,0 +1,26 @@
+{
+  "id": "01a17720-ca09-7e41-8824-db712cc3d5c6",
+  "type": "event",
+  "title": "Christmas craft fair",
+  "slug": "christmas-craft-fair",
+  "summary": "Knitwear, pottery, prints and baking from makers on both islands.",
+  "published": {
+    "days": -5
+  },
+  "fields": {
+    "startsAt": {
+      "days": 23,
+      "time": "11:00"
+    },
+    "endsAt": {
+      "days": 23,
+      "time": "16:00"
+    },
+    "venue": "Westray Community Hall",
+    "organiser": "Westray Craft Association"
+  },
+  "dateFields": [
+    "startsAt",
+    "endsAt"
+  ]
+}

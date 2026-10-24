@@ -6,6 +6,23 @@
   "seo.title-template": "%s | Westray Online",
   "seo.description": "The community website for Westray and Papa Westray, in Orkney: news, what's on, clubs, businesses and a noticeboard.",
   "social.links": [
-    { "network": "github", "url": "https://github.com/steve-r-lewis/westray-papa-westray" }
-  ]
+    {
+      "network": "github",
+      "url": "https://github.com/steve-r-lewis/westray-papa-westray"
+    }
+  ],
+  "organisation.legal-name": "Westray Digital Access Group",
+  "contact.general": {
+    "email": "chuckme@busigraph.com"
+  },
+  "contact.data-protection": {
+    "email": "chuckme@busigraph.com"
+  },
+  "contact.security": {
+    "email": "chuckme@busigraph.com",
+    "policy": "https://github.com/steve-r-lewis/westray-papa-westray/blob/master/SECURITY.md",
+    "preferredLanguages": [
+      "en"
+    ]
+  }
 }

@@ -9,3 +9,11 @@ allowBuilds:
 # Refuse packages published less than a day ago (pnpm 12's default, stated here so
 # every pnpm version that reads this file resolves the lockfile the same way).
 minimumReleaseAge: 1440
+
+# Publisher v1.0.0 takes the rich-text library from GitHub (pinned by tag), which
+# pnpm refuses in a dependency's dependencies by default. Allowed only because the
+# override below holds it to the commit package.json pins directly; any other Git or
+# tarball dependency still needs a reviewed change here.
+blockExoticSubdeps: false
+overrides:
+  '@nuxt4-layers/rich-text': '$@nuxt4-layers/rich-text'

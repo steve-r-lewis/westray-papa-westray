@@ -1,0 +1,26 @@
+{
+  "id": "01a17720-ca0e-7846-8fcb-6f79e1ea9e95",
+  "type": "workshop",
+  "title": "Dinghy maintenance",
+  "slug": "dinghy-maintenance",
+  "summary": "Get a small boat ready for the winter, with the sailing club.",
+  "published": {
+    "days": -5
+  },
+  "fields": {
+    "startsAt": {
+      "days": 7,
+      "time": "14:00"
+    },
+    "endsAt": {
+      "days": 7,
+      "time": "16:00"
+    },
+    "venue": "Pierowall harbour slipway",
+    "organiser": "Westray Sailing Club"
+  },
+  "dateFields": [
+    "startsAt",
+    "endsAt"
+  ]
+}

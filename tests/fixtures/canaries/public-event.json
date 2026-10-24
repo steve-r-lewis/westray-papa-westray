@@ -1,0 +1,20 @@
+{
+  "id": "01a17d16-ab0a-78cb-9da0-15acecaad225",
+  "type": "event",
+  "title": "A public event",
+  "summary": "Anyone may see this.",
+  "slug": "public-event",
+  "published": {
+    "days": -1
+  },
+  "fields": {
+    "startsAt": {
+      "days": 2,
+      "time": "18:00"
+    },
+    "venue": "The hall"
+  },
+  "dateFields": [
+    "startsAt"
+  ]
+}

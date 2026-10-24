@@ -1,0 +1,26 @@
+{
+  "id": "01a17720-ca0f-7d43-9e2d-84e7f6ccc3f5",
+  "type": "workshop",
+  "title": "Winter light photography",
+  "slug": "winter-light-photography",
+  "summary": "Making the most of short days and low sun, with any camera or phone.",
+  "published": {
+    "days": -5
+  },
+  "fields": {
+    "startsAt": {
+      "days": 19,
+      "time": "12:00"
+    },
+    "endsAt": {
+      "days": 19,
+      "time": "15:00"
+    },
+    "venue": "Westray Community Hall",
+    "organiser": "Seaview Holiday Stays"
+  },
+  "dateFields": [
+    "startsAt",
+    "endsAt"
+  ]
+}

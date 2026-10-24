@@ -1,0 +1,26 @@
+{
+  "id": "01a17720-ca08-7345-9b0e-0cefb2ac370a",
+  "type": "event",
+  "title": "Sailing club annual dinner",
+  "slug": "sailing-club-annual-dinner",
+  "summary": "Dinner, prizes for the season's races and a ceilidh band.",
+  "published": {
+    "days": -5
+  },
+  "fields": {
+    "startsAt": {
+      "days": 9,
+      "time": "19:00"
+    },
+    "endsAt": {
+      "days": 9,
+      "time": "23:00"
+    },
+    "venue": "Westray Community Hall",
+    "organiser": "Westray Sailing Club"
+  },
+  "dateFields": [
+    "startsAt",
+    "endsAt"
+  ]
+}

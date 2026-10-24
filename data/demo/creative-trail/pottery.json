@@ -1,0 +1,15 @@
+{
+  "id": "01a17720-ca10-7e8a-beec-06874dbcd715",
+  "type": "creative-trail-stop",
+  "title": "Harbour Pottery",
+  "slug": "pottery",
+  "summary": "Wheel-thrown stoneware in the colours of the shore.",
+  "published": {
+    "days": -20
+  },
+  "fields": {
+    "stop": 1,
+    "location": "Pierowall, by the harbour",
+    "maker": "Kirsty Muir"
+  }
+}

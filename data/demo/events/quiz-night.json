@@ -1,0 +1,26 @@
+{
+  "id": "01a17720-ca0a-788d-878b-0f4f3e50ed58",
+  "type": "event",
+  "title": "Quiz night",
+  "slug": "quiz-night",
+  "summary": "Teams of up to six, in aid of the hall fund.",
+  "published": {
+    "days": -5
+  },
+  "fields": {
+    "startsAt": {
+      "days": 4,
+      "time": "20:00"
+    },
+    "endsAt": {
+      "days": 4,
+      "time": "22:00"
+    },
+    "venue": "Westray Community Hall, side room",
+    "organiser": "Hall committee"
+  },
+  "dateFields": [
+    "startsAt",
+    "endsAt"
+  ]
+}

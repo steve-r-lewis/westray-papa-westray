@@ -1,0 +1,26 @@
+{
+  "id": "01a17720-ca0d-76cf-8156-e12195970d5c",
+  "type": "workshop",
+  "title": "Spinning for beginners",
+  "slug": "spinning-for-beginners",
+  "summary": "Learn to spin North Ronaldsay fleece on a wheel or a drop spindle.",
+  "published": {
+    "days": -5
+  },
+  "fields": {
+    "startsAt": {
+      "days": 12,
+      "time": "10:00"
+    },
+    "endsAt": {
+      "days": 12,
+      "time": "13:00"
+    },
+    "venue": "Westray Heritage Centre",
+    "organiser": "Westray Craft Association"
+  },
+  "dateFields": [
+    "startsAt",
+    "endsAt"
+  ]
+}

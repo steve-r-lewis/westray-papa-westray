@@ -8,16 +8,21 @@
 
 ## Status
 
-**Slice 1a built:** the application shell after the `westray.uk` mock-up, the migration runner and seeding, and themes through Theme Manager.
+**Slice 1b built:** on top of slice 1a's shell, themes and migration runner, the site's facts and contacts come from Configuration and its content from Publisher. Accounts follow in slice 1c.
 
 | Part | State |
 |---|---|
-| Home page | A panelled dashboard, after the mock-up: a panel for each section (What's on, News, Community, Market) and for the noticeboard, photo of the week and poll, each saying what is coming until its slice fills it |
+| Home page | A panelled dashboard, after the mock-up: a panel for each section and for the noticeboard, photo of the week and poll. The What's on and News panels list the next events and the newest news from Publisher; the rest say what is coming until their slice fills them |
 | Header and footer | The header links to the sections and holds Appearance (palette and colour mode) and Sign in; every label and link is read from [`data/shell.json`](data/shell.json); responsive from phone to desktop |
 | Side menu | For signed-in members only, so hidden until sign-in arrives with slice 1c |
-| Site facts | The name, tagline, locale, default theme, title template, description and social links come from [Configuration](https://github.com/nuxt4-layers/configuration/tree/v1.2.0), set in `data/configuration.json` |
+| Site facts | The name, tagline, locale, default theme, title template, description, social links, the organisation (Westray Digital Access Group) and its contacts come from [Configuration](https://github.com/nuxt4-layers/configuration/tree/v1.2.0), set in `data/configuration.json` |
+| Content | Pages, articles, blog posts, events, workshops and Creative Trail stops are [Publisher](https://github.com/nuxt4-layers/publisher/tree/v1.0.0) documents, drawn by the site's own components. Nobody can change them on the site until slice 1c: they are seeded from `data/content/` |
+| Information pages | About and Policies (text from the mock-up), and Contact, which lists the general, data-protection and security contacts. A contact form waits for an enquiry capability |
+| News and What's on | Section pages for News, Articles, Blog, What's on, Events, Workshops and the Creative Trail list published documents, with RSS and Atom feeds. The real site starts empty |
+| For machines | `sitemap.xml`, `robots.txt` and `.well-known/security.txt` (RFC 9116, from Configuration's `contact.security`) |
+| Demonstration | A separate pre-launch deployment can run with invented content, a banner on every page and nothing indexed; see [Demonstration deployment](#demonstration-deployment) |
 | Themes | Four seasonal palettes (Spring, Summer, Autumn and Winter) stored by [Theme Manager](https://github.com/nuxt4-layers/theme-manager/tree/v0.2.1), meeting WCAG 2.2 AA contrast in light and dark; visitors choose a palette and a colour mode |
-| Pages | Every page beyond the home page says "coming soon" |
+| Pages still to come | Community, Market, Sign in and the account pages say "coming soon" |
 
 See the [design](docs/design.md).
 
@@ -46,7 +51,7 @@ Westray-Papa-Westray draws every screen itself and composes headless `nuxt4-laye
 | [`identity`](https://github.com/nuxt4-layers/identity) | Accounts, groups and memberships |
 | [`profile`](https://github.com/nuxt4-layers/profile) | People's own details, under their control |
 | [`authorisation`](https://github.com/nuxt4-layers/authorisation) | Roles and access decisions |
-| [`publisher`](https://github.com/nuxt4-layers/publisher) | Pages, articles, events and notices |
+| [`publisher`](https://github.com/nuxt4-layers/publisher/tree/v1.0.0) | Pages, articles, events and notices. Composed now, at its `v1.0.0` commit |
 | [`configuration`](https://github.com/nuxt4-layers/configuration/tree/v1.2.0) | Site facts, contact details and links. Composed now, at its `v1.2.0` commit |
 | [`theme-manager`](https://github.com/nuxt4-layers/theme-manager/tree/v0.2.1) | Themes, light and dark mode. Composed now, at its `v0.2.1` commit |
 
@@ -115,12 +120,14 @@ Copy-Item .env.example .env
 cp .env.example .env
 ```
 
-It holds two settings:
+It holds these settings:
 
 | Variable | Default | Meaning |
 |---|---|---|
 | `DATABASE_URL` | `postgres://westray-papa-westray:westray-papa-westray@localhost:5432/westray-papa-westray` | The PostgreSQL database the site, migrations and seeding use; required. The default matches the container in `compose.yaml` |
 | `PLATFORM_SUPER_ADMIN_ID` | `00000000-0000-4000-8000-000000000001` | The platform super admin's account id. Seeded data, such as the example themes, belongs to this account; Identity creates the account with this id in slice 1c |
+| `DEMO_MODE` | `false` | `true` only on the separate demonstration deployment: see [Demonstration deployment](#demonstration-deployment) |
+| `DEMO_LAUNCH_DATE` | empty | The real site's launch date (`YYYY-MM-DD`) for the demonstration's banner; empty while it is to be announced |
 
 To use a PostgreSQL 16 you already run instead of Docker, create a database and a user for it, and point `DATABASE_URL` at them. Then skip `pnpm db:up` below.
 
@@ -129,12 +136,12 @@ To use a PostgreSQL 16 you already run instead of Docker, create a database and 
 ```sh
 pnpm db:up        # starts PostgreSQL 16 in Docker, listening on 127.0.0.1:5432 only
 pnpm db:migrate   # applies pending migrations; prints how many were applied
-pnpm db:seed      # loads the four example themes; prints how many were added
+pnpm db:seed      # loads the four example themes and the information pages; prints how many were added
 ```
 
 The data lives in the Docker volume `postgres-data`, so it survives restarts. Migration rules are in [the migrations folder](server/database/migrations/README.md).
 
-Seeding adds anything missing and leaves what is already stored alone, so it is safe to run again; `pnpm db:seed --update` overwrites the seeded themes with the versions in `data/themes/`.
+Seeding adds anything missing and leaves what is already stored alone, so it is safe to run again. `pnpm db:seed --update` overwrites the seeded themes with the versions in `data/themes/`, and saves any page whose file in `data/content/` has changed as a new Publisher version, publishing it if the page is published, so its history is kept. Publisher and Configuration create and migrate their own schemas (`publisher`, `configuration`); seeding migrates Publisher's first.
 
 ### 7. Run the site
 
@@ -142,7 +149,7 @@ Seeding adds anything missing and leaves what is already stored alone, so it is 
 pnpm dev
 ```
 
-Open `http://localhost:3000`. You should see the site in its Spring palette: the header with the section links, Appearance and Sign in, the "Welcome to Westray's Digital Commons" banner, and the dashboard's panels. Appearance opens the palette picker and the System, Light and Dark switch. Every page but the home page says "Coming soon". There is no side menu yet: it is for signed-in members, and signing in arrives with slice 1c. Stop the server with Ctrl+C.
+Open `http://localhost:3000`. You should see the site in its Spring palette: the header with the section links, Appearance and Sign in, the "Welcome to Westray's Digital Commons" banner, and the dashboard's panels. Appearance opens the palette picker and the System, Light and Dark switch. The footer's About, Contact and Policies pages show their text; News and What's on say there is nothing yet, because the real site starts empty (seed the [demonstration content](#demonstration-deployment) to see them filled). Community, Market and Sign in say "Coming soon". There is no side menu yet: it is for signed-in members, and signing in arrives with slice 1c. Stop the server with Ctrl+C.
 
 If Appearance has no palette picker, the themes are not seeded (step 6) or the database is not running.
 
@@ -154,7 +161,14 @@ pnpm test        # unit and component tests
 pnpm build       # production build into .output/
 ```
 
-`pnpm test` skips the migration runner's database tests unless `DATABASE_URL` is set in the shell, because tests do not read `.env`. To include them:
+`pnpm test` skips the database tests unless `DATABASE_URL` is set in the shell, because tests do not read `.env`. They include the migration runner's tests and two end-to-end suites, which build the site and run it on databases of their own, created beside `DATABASE_URL`'s and dropped afterwards (so its user must be allowed to create databases, as the container's is):
+
+| Suite | Proves |
+|---|---|
+| `tests/e2e/leaks.test.ts` | Canary leak tests. Drafts, scheduled and archived documents, a published article's newer draft and a members' notice each carry a unique canary string (`tests/fixtures/canaries/`). Anonymous requests to every page, API, feed, sitemap and error response, found by following every link, must never show one, and a hidden document's address must answer exactly as an address that never held anything |
+| `tests/e2e/demo.test.ts` | The demonstration deployment: its banner on every page, `noindex` everywhere, a disallowing `robots.txt`, and the invented content listed |
+
+To include them:
 
 ```powershell
 # Windows (PowerShell)
@@ -244,24 +258,62 @@ function repoProvision {
 | `ERR_PNPM_GIT_DEP_PREPARE_NOT_ALLOWED` | Theme Manager is installed from GitHub and runs its `prepare` script. `pnpm-workspace.yaml` allows it for the pinned commit only; when the commit in `package.json` changes, change it there too |
 | Appearance has no palette picker, and the site is in blue-grey | Theme Manager could not reach stored themes, so its built-in default applies: start the database and run `pnpm db:migrate` and `pnpm db:seed` |
 | `password authentication failed for user "westray-papa-westray"` | Your local database was created before the user, password and database were renamed from `westray`; PostgreSQL only sets them when its volume is first created. `pnpm db:up` now makes a fresh volume, as `compose.yaml` fixes the project name; if the old container still holds port 5432, stop it in Docker Desktop or with `docker ps` and `docker stop`, then run `pnpm db:up` and `pnpm db:migrate` again. Remove the old volume when you no longer need it: `docker volume ls` lists it with a `postgres-data` suffix |
-| Every page answers 503 | The site cannot reach its database, which Configuration needs for every page: start it with `pnpm db:up` |
+| Every page answers 503 | The site cannot reach its database, which Configuration and Publisher need for every page: start it with `pnpm db:up` |
+| `ERR_PNPM_EXOTIC_SUBDEP` | A dependency's dependency comes from Git. Publisher takes `rich-text` from GitHub, which `pnpm-workspace.yaml` allows only as the commit `package.json` pins; anything else needs a reviewed change there |
+| About and Policies say "Page not found" | Their content is not seeded: run `pnpm db:seed` |
 | `ECONNREFUSED 127.0.0.1:5432` | The database is not running: `pnpm db:up`, and check Docker Desktop is started |
 | `pnpm db:up` says port 5432 is already allocated | Another PostgreSQL is using the port. Stop it, or change the left-hand port in `compose.yaml` and in `DATABASE_URL` to match, such as `5433` |
 | Port 3000 is in use | Run `pnpm dev --port 3001` |
+
+## Demonstration deployment
+
+Before launch, a separate deployment shows what the site will be like, filled with invented content. It is the same code with two environment settings; the real deployment leaves both unset.
+
+| Setting | Effect |
+|---|---|
+| `DEMO_MODE=true` | A banner on every page: "Pre-launch demonstration: everything here is fictitious; launches on [date]; at launch the site starts empty". Every answer carries `X-Robots-Tag: noindex, nofollow`, every page a `robots` meta tag, and `robots.txt` disallows everything. `pnpm db:seed` adds the content in `data/demo/` |
+| `DEMO_LAUNCH_DATE=2027-04-01` | The date in the banner; leave it empty for "a date to be announced" |
+
+Both are the application's own Configuration settings (`demo.enabled`, `demo.launch-date`), declared `locked`, so only the deployment sets them and nobody can change them on the site.
+
+The demonstration's groups are invented but based on island life (the craft association, the sailing club, holiday stays), with fictitious people, `01632 960xxx` telephone numbers and `example.org` addresses. Its dates are relative to the day it is seeded: run `pnpm db:seed --update` with `DEMO_MODE=true` to move events and workshops on, or delete and reseed its database to refresh everything. Demonstration content is never loaded without `DEMO_MODE=true`; give the demonstration its own database, never the real site's.
+
+To try it locally, set the variables in the shell rather than in `.env`, which `scripts/provision.ps1` overwrites:
+
+```powershell
+# Windows (PowerShell)
+$env:DEMO_MODE = "true"
+pnpm db:seed
+pnpm dev
+```
+
+```sh
+# macOS or Linux
+DEMO_MODE=true pnpm db:seed
+DEMO_MODE=true pnpm dev
+```
+
+The invented content then stays in your local database; `./scripts/provision.ps1 -ResetData` clears it.
 
 ## Where things are
 
 | Path | Holds |
 |---|---|
-| `data/configuration.json` | The site's facts, as Configuration deployment values: name, tagline, locale, default theme, title template, description and social links. Administrators can override them at the platform scope once sign-in arrives in slice 1c |
-| `data/shell.json` | Labels, header links, the members' side menu, the footer, the home page's text and dashboard panels, the theme picker's order and the pages still to come. Publisher takes over the content in the rest of slice 1b |
+| `data/configuration.json` | The site's facts, as Configuration deployment values: name, tagline, locale, default theme, title template, description, social links, the organisation and its general, data-protection and security contacts. Administrators can override them at the platform scope once sign-in arrives in slice 1c |
+| `data/content/` | The real site's content, seeded into Publisher: one `.json` per document (type, title, address, dates) with its text beside it in `.md`. Only the information pages; everything else is published on the site from slice 1c |
+| `data/demo/` | Invented content for the demonstration deployment only, with dates relative to the day it is seeded |
+| `data/shell.json` | Labels, header links, the members' side menu, the footer, the home page's text and dashboard panels, the section pages (which types each lists, in which order), the Contact page's role names, the demonstration banner, the theme picker's order and the pages still to come |
 | `data/themes/` | The four seasonal palettes, generated by `scripts/themes/generate.ts` |
-| `shared/shell.ts`, `shared/icons.ts` | The schema that data must meet, and the icons it may name |
-| `app/` | Layout, components and pages, styled only with Theme Manager's semantic classes (`bg-fill-*`, `text-pen-*`, `border-edge-*`) |
-| `server/api/shell.get.ts` | Serves the shell data through a port that slice 1b re-points |
+| `shared/shell.ts`, `shared/icons.ts`, `shared/content.ts` | The schema that data must meet, the icons it may name, and what the screens know of content: the site, the public and listed types, and a listing's cards |
+| `app/` | Layout, components and pages, styled only with Theme Manager's semantic classes (`bg-fill-*`, `text-pen-*`, `border-edge-*`). `app/components/RichText.vue` draws Publisher's rich-text safe trees, never HTML |
+| `server/api/shell.get.ts` | Serves the shell data |
+| `server/utils/document-types.ts` | The document types registered with Publisher: page, article, blog post, event, workshop, Creative Trail stop, and the members' notice |
+| `server/plugins/publisher.ts` | Connects Publisher to the `pg` pool, one site (`westray`), nobody signed in, and access decisions that refuse every change until slice 1c (`server/utils/publisher-access.ts`). Publisher's own HTTP API is off |
+| `server/api/content/`, `server/routes/` | What anyone may read: an address's published document, a section's listing, feeds, `sitemap.xml`, `robots.txt` and `security.txt` |
 | `server/plugins/configuration.ts` | Connects Configuration to PostgreSQL (its own `configuration` schema, migrated at start-up) and supplies the deployment values; its administration pages stay off until slice 1c |
 | `server/plugins/theme-manager.ts` | Connects Theme Manager to PostgreSQL (`server/utils/theme-store.ts`) and to the access policy (`server/utils/theme-policy.ts`): anyone may see and use public themes, and every change is refused until Authorisation arrives in slice 1c |
-| `server/database/` | Migration runner, migrations and seeding |
+| `server/database/` | Migration runner, migrations and seeding: themes, and content through Publisher's `importPublisherContent` |
+| `tests/e2e/`, `tests/fixtures/canaries/` | The built site's tests, and the hidden content the leak tests look for |
 
 ## Documents
 

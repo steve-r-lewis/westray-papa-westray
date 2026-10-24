@@ -3,7 +3,8 @@ import type { IconName } from '#shared/icons'
 import { icons } from '#shared/icons'
 
 // The site's facts, from Configuration's public values: name, tagline, locale,
-// default theme, title template, description and social links. The key matches
+// default theme, title template, description, social links, the organisation and its
+// contacts, and whether this is the pre-launch demonstration. The key matches
 // Configuration's own useConfiguration(), so its components share the one fetch.
 const key = 'configuration:public:'
 
@@ -15,11 +16,18 @@ export function loadSite() {
 
 export interface SocialLink { network: string, url: string }
 
+export interface ContactPoint { email?: string, phone?: string, url?: string }
+
+// The platform's contacts, by role, as the Contact page lists them.
+export const CONTACT_ROLES = ['general', 'data-protection', 'security'] as const
+export type ContactRole = (typeof CONTACT_ROLES)[number]
+
 export function useSite() {
   const { data } = useNuxtData<ConfigurationAnswer>(key)
   return computed(() => {
     const values = data.value?.values ?? {}
     const text = (name: string) => typeof values[name] === 'string' ? values[name] as string : ''
+    const contact = (name: string) => (values[name] && typeof values[name] === 'object' ? values[name] as ContactPoint : null)
     return {
       name: text('site.name'),
       tagline: text('site.tagline'),
@@ -29,6 +37,13 @@ export function useSite() {
       // Contains %s once, where the page title goes.
       titleTemplate: text('seo.title-template'),
       social: (Array.isArray(values['social.links']) ? values['social.links'] : []) as SocialLink[],
+      organisation: text('organisation.legal-name'),
+      contacts: Object.fromEntries(CONTACT_ROLES.map(role => [role, contact(`contact.${role}`)])) as Record<ContactRole, ContactPoint | null>,
+      demo: {
+        enabled: values['demo.enabled'] === true,
+        // YYYY-MM-DD, or empty while the launch date is to be announced.
+        launchDate: text('demo.launch-date'),
+      },
     }
   })
 }

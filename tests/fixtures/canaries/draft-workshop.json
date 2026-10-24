@@ -1,0 +1,21 @@
+{
+  "id": "01a17d16-ab06-7205-840f-af11142e0077",
+  "type": "workshop",
+  "title": "CANARY-draft-workshop-43df584a",
+  "summary": "CANARY-draft-workshop-43df584a",
+  "slug": "hidden-draft-workshop",
+  "published": {
+    "days": -1
+  },
+  "status": "draft",
+  "fields": {
+    "startsAt": {
+      "days": 5,
+      "time": "10:00"
+    },
+    "venue": "CANARY-draft-workshop-43df584a"
+  },
+  "dateFields": [
+    "startsAt"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "01a17720-ca0b-7d9b-bb56-61e19af84512",
+  "type": "event",
+  "title": "Winter star walk",
+  "slug": "winter-star-walk",
+  "summary": "A guided walk under dark skies, if the clouds allow.",
+  "published": {
+    "days": -5
+  },
+  "fields": {
+    "startsAt": {
+      "days": 15,
+      "time": "19:30"
+    },
+    "endsAt": {
+      "days": 15,
+      "time": "21:30"
+    },
+    "venue": "Meet at the Noup Head car park",
+    "organiser": "Seaview Holiday Stays"
+  },
+  "dateFields": [
+    "startsAt",
+    "endsAt"
+  ]
+}

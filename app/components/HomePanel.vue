@@ -2,11 +2,14 @@
 import type { z } from 'zod'
 import type { homePanelSchema } from '#shared/shell'
 
-// One dashboard panel. Until a section's content is built it shows the section's
-// links and says the rest is coming; slice 1b fills News and What's on from Publisher.
-defineProps<{ panel: z.infer<typeof homePanelSchema> }>()
+// One dashboard panel. A panel for a section lists its newest or next few documents
+// from Publisher; any other shows its links and says the rest is coming.
+const props = defineProps<{ panel: z.infer<typeof homePanelSchema> }>()
 const shell = useShell()
 const id = useId()
+const section = computed(() => shell.value.sections.find(entry => entry.path === props.panel.section))
+const listing = props.panel.section ? await useSectionListing(props.panel.section, 3) : null
+const cards = computed(() => listing?.data.value?.cards ?? [])
 </script>
 
 <template>
@@ -20,11 +23,16 @@ const id = useId()
         <AppIcon :name="panel.icon" :size="22" />
         {{ panel.title }}
       </h2>
-      <span class="shrink-0 rounded-pill border border-edge-info-default bg-fill-info-default px-2.5 py-0.5 text-xs font-semibold text-pen-info-default">
+      <span v-if="!section" class="shrink-0 rounded-pill border border-edge-info-default bg-fill-info-default px-2.5 py-0.5 text-xs font-semibold text-pen-info-default">
         {{ shell.labels.comingSoonTitle }}
       </span>
     </div>
     <p class="mb-4">{{ panel.description }}</p>
+
+    <div v-if="section" class="mb-4">
+      <ContentCards v-if="cards.length" :cards="cards" compact />
+      <p v-else class="italic">{{ section.empty }}</p>
+    </div>
 
     <ul v-if="panel.links.length" class="mb-4 flex flex-wrap gap-2">
       <li v-for="link in panel.links" :key="link.to">
