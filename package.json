@@ -23,7 +23,7 @@
     "@nuxt4-layers/configuration": "github:nuxt4-layers/configuration#06703c5a45b370bf0f582bf012df1accc220db0b",
     "@nuxt4-layers/publisher": "github:nuxt4-layers/publisher#4410cab7b84c1b0395de2bdf657e3bcc3d476b87",
     "@nuxt4-layers/rich-text": "catalog:",
-    "@nuxt4-layers/theme-manager": "github:nuxt4-layers/theme-manager#e63274dd0fa8801090252e7f07ecfa4145a3ea6b",
+    "@nuxt4-layers/theme-manager": "github:nuxt4-layers/theme-manager#ddade879d29da489df67796d156fa85ad4f80324",
     "@tailwindcss/vite": "^4.3.3",
     "nuxt": "^4.6.2",
     "pg": "^8.23.1",

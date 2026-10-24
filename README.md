@@ -21,7 +21,7 @@
 | News and What's on | Section pages for News, Articles, Blog, What's on, Events, Workshops and the Creative Trail list published documents, with RSS and Atom feeds. The real site starts empty |
 | For machines | `sitemap.xml`, `robots.txt` and `.well-known/security.txt` (RFC 9116, from Configuration's `contact.security`) |
 | Demonstration | A separate pre-launch deployment can run with invented content, a banner on every page and nothing indexed; see [Demonstration deployment](#demonstration-deployment) |
-| Themes | Four seasonal palettes (Spring, Summer, Autumn and Winter) stored by [Theme Manager](https://github.com/nuxt4-layers/theme-manager/tree/v0.2.1), meeting WCAG 2.2 AA contrast in light and dark; visitors choose a palette and a colour mode |
+| Themes | Four seasonal palettes (Spring, Summer, Autumn and Winter) stored by [Theme Manager](https://github.com/nuxt4-layers/theme-manager/tree/v0.2.2), meeting WCAG 2.2 AA contrast in light and dark; visitors choose a palette and a colour mode |
 | Pages still to come | Community, Market, Sign in and the account pages say "coming soon" |
 
 See the [design](docs/design.md).
@@ -53,7 +53,7 @@ Westray-Papa-Westray draws every screen itself and composes headless `nuxt4-laye
 | [`authorisation`](https://github.com/nuxt4-layers/authorisation) | Roles and access decisions |
 | [`publisher`](https://github.com/nuxt4-layers/publisher/tree/v1.0.0) | Pages, articles, events and notices. Composed now, at its `v1.0.0` commit |
 | [`configuration`](https://github.com/nuxt4-layers/configuration/tree/v1.2.0) | Site facts, contact details and links. Composed now, at its `v1.2.0` commit |
-| [`theme-manager`](https://github.com/nuxt4-layers/theme-manager/tree/v0.2.1) | Themes, light and dark mode. Composed now, at its `v0.2.1` commit |
+| [`theme-manager`](https://github.com/nuxt4-layers/theme-manager/tree/v0.2.2) | Themes, light and dark mode. Composed now, at its `v0.2.2` commit |
 
 Everything a visitor reads is data: text, menus, themes and settings come from these capabilities, never from code.
 
@@ -255,7 +255,6 @@ function repoProvision {
 | `Command "nuxt" not found` or `Command "dev" not found` | Your `package.json` is not the repository's, often after an editor's project wizard rewrote it. Check with `git status`, restore it with `git restore package.json pnpm-lock.yaml`, then run `pnpm install` |
 | `ERR_PNPM_IGNORED_BUILDS` | A new dependency wants to run an install script. Add it under `allowBuilds` in `pnpm-workspace.yaml` only if you trust it |
 | `DATABASE_URL is not set` or `PLATFORM_SUPER_ADMIN_ID must be set` | Step 5 was skipped, or `.env` predates the second setting: copy `.env.example` to `.env` again |
-| `ERR_PNPM_GIT_DEP_PREPARE_NOT_ALLOWED` | Theme Manager is installed from GitHub and runs its `prepare` script. `pnpm-workspace.yaml` allows it for the pinned commit only; when the commit in `package.json` changes, change it there too |
 | Appearance has no palette picker, and the site is in blue-grey | Theme Manager could not reach stored themes, so its built-in default applies: start the database and run `pnpm db:migrate` and `pnpm db:seed` |
 | `password authentication failed for user "westray-papa-westray"` | Your local database was created before the user, password and database were renamed from `westray`; PostgreSQL only sets them when its volume is first created. `pnpm db:up` now makes a fresh volume, as `compose.yaml` fixes the project name; if the old container still holds port 5432, stop it in Docker Desktop or with `docker ps` and `docker stop`, then run `pnpm db:up` and `pnpm db:migrate` again. Remove the old volume when you no longer need it: `docker volume ls` lists it with a `postgres-data` suffix |
 | Every page answers 503 | The site cannot reach its database, which Configuration and Publisher need for every page: start it with `pnpm db:up` |

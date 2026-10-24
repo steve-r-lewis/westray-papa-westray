@@ -68,7 +68,7 @@ A separate pre-launch deployment shows the site filled with invented content. Tw
 
 The mock-up's seasonal palettes become Theme Manager themes; light, dark and system are the person's preference. Every theme must pass Theme Manager's contrast checks before it is published: the mock-up's light-green text on pale green does not.
 
-Done in slice 1a, on Theme Manager `v0.2.1`:
+Done in slice 1a, on Theme Manager `v0.2.2`:
 
 | Part | How |
 |---|---|

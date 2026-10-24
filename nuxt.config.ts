@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
   // Layers, each pinned in package.json to a release commit:
-  // Theme Manager v0.2.1, Configuration v1.2.0, Publisher v1.0.0.
+  // Theme Manager v0.2.2, Configuration v1.2.0, Publisher v1.0.0.
   extends: ['@nuxt4-layers/theme-manager', '@nuxt4-layers/configuration', '@nuxt4-layers/publisher'],
   // Configuration's administration pages wait for sign-in and approvals (slice 1c).
   configuration: { pages: { enabled: false } },
