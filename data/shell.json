@@ -1,19 +1,15 @@
 {
   "site": {
-    "name": "Westray Online",
-    "tagline": "Two Islands, One Community, Many Voices",
     "nameLines": [
       "Westray and",
       "Papa Westray"
     ],
-    "locale": "en-GB",
     "logo": {
       "src": "/images/logo.png",
       "alt": ""
     }
   },
   "themes": {
-    "default": "westray-spring",
     "order": [
       "westray-spring",
       "westray-summer",
@@ -33,6 +29,19 @@
     "appearance": "Appearance",
     "seeAll": "See all",
     "social": "Elsewhere",
+    "networks": {
+      "bluesky": "Bluesky",
+      "facebook": "Facebook",
+      "github": "GitHub",
+      "instagram": "Instagram",
+      "linkedin": "LinkedIn",
+      "mastodon": "Mastodon",
+      "threads": "Threads",
+      "tiktok": "TikTok",
+      "x": "X",
+      "youtube": "YouTube",
+      "other": "Website"
+    },
     "theme": "Palette",
     "colourMode": "Colour mode",
     "modeSystem": "System",
@@ -126,13 +135,6 @@
       {
         "label": "Policies",
         "to": "/policies"
-      }
-    ],
-    "social": [
-      {
-        "label": "Source code on GitHub",
-        "to": "https://github.com/steve-r-lewis/westray-papa-westray",
-        "icon": "github"
       }
     ]
   },

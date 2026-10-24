@@ -2,6 +2,7 @@
 defineProps<{ menuOpen: boolean }>()
 const emit = defineEmits<{ openMenu: [] }>()
 const shell = useShell()
+const site = useSite()
 const member = useMember()
 </script>
 
@@ -23,8 +24,8 @@ const member = useMember()
     <NuxtLink to="/" class="mr-auto flex min-w-0 flex-1 items-center gap-3 no-underline xl:flex-none">
       <img :src="shell.site.logo.src" :alt="shell.site.logo.alt" width="44" height="44" class="size-9 shrink-0 sm:size-11">
       <span class="flex min-w-0 flex-col">
-        <span class="text-xl font-bold leading-tight sm:text-2xl">{{ shell.site.name }}</span>
-        <span class="hidden text-sm sm:block xl:whitespace-nowrap">{{ shell.site.tagline }}</span>
+        <span class="text-xl font-bold leading-tight sm:text-2xl">{{ site.name }}</span>
+        <span class="hidden text-sm sm:block xl:whitespace-nowrap">{{ site.tagline }}</span>
       </span>
     </NuxtLink>
 

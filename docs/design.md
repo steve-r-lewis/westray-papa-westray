@@ -33,6 +33,10 @@ The platform's capabilities are headless ([ADR-0009](https://github.com/nuxt4-la
 
 Document types (article, blog post, event, workshop, trail stop, group page, notice) are registered by Westray-Papa-Westray with the publisher; no layer names them.
 
+## Site facts
+
+Slice 1b composes Configuration `v1.2.0`. The site's name, tagline, locale, default theme, title template, description and social links are deployment values in `data/configuration.json`, read through Configuration's public endpoint. Changing a value at the platform scope goes through Identity and Authorisation (who may change it, and a second person for `high` settings), so its administration pages are switched off until slice 1c; until then a change is a commit. Configuration keeps its tables in its own schema and migrates them at start-up. Unlike its documentation's account, it needs the database even to serve deployment values, so the site now requires one.
+
 ## Themes
 
 The mock-up's seasonal palettes become Theme Manager themes; light, dark and system are the person's preference. Every theme must pass Theme Manager's contrast checks before it is published: the mock-up's light-green text on pale green does not.

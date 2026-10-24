@@ -3,7 +3,7 @@ import type { NuxtError } from '#app'
 
 const props = defineProps<{ error: NuxtError }>()
 // The shell may be what failed, so the page falls back to the status code alone.
-const { data: shell } = await loadShell()
+const [{ data: shell }] = await Promise.all([loadShell(), loadSite()])
 useSiteTheme()
 const notFound = computed(() => props.error.statusCode === 404)
 const title = computed(() => shell.value

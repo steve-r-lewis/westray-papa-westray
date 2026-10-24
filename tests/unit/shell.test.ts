@@ -18,7 +18,6 @@ function allLinks(data: Shell) {
     ...data.menu.groups.flatMap(group => group.items),
     ...data.menu.footer,
     ...data.footer.links,
-    ...data.footer.social,
     ...data.home.actions,
   ]
 }
@@ -58,12 +57,6 @@ describe('shell schema', () => {
   it('rejects an icon it does not know', () => {
     const data = clone() as unknown as { header: { links: Array<{ icon?: string }> } }
     data.header.links[0]!.icon = 'unicorn'
-    expect(shellSchema.safeParse(data).success).toBe(false)
-  })
-
-  it('rejects a social link without an icon', () => {
-    const data = clone()
-    data.footer.social = [{ label: 'Somewhere', to: 'https://example.org' } as never]
     expect(shellSchema.safeParse(data).success).toBe(false)
   })
 

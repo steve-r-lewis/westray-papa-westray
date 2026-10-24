@@ -1,0 +1,11 @@
+{
+  "site.name": "Westray Online",
+  "site.tagline": "Two Islands, One Community, Many Voices",
+  "site.default-locale": "en-GB",
+  "site.default-theme": "westray-spring",
+  "seo.title-template": "%s | Westray Online",
+  "seo.description": "The community website for Westray and Papa Westray, in Orkney: news, what's on, clubs, businesses and a noticeboard.",
+  "social.links": [
+    { "network": "github", "url": "https://github.com/steve-r-lewis/westray-papa-westray" }
+  ]
+}
