@@ -31,6 +31,21 @@ export function runtimeRole(runtimeUrl: string, ownerUrl: string): RuntimeRole {
  * needs CREATEROLE (as the local container's user and Supabase's `postgres` have).
  */
 export async function ensureRuntimeRole(sql: Sql, role: RuntimeRole): Promise<void> {
+  // Roles belong to the whole server, so another process may be making the same
+  // change at once (several sites starting, or test suites in parallel): try again.
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await applyRuntimeRole(sql, role)
+    }
+    catch (error) {
+      const code = (error as { code?: string }).code
+      if (attempt >= 5 || (code !== 'XX000' && code !== '42710' && code !== '23505')) throw error
+      await new Promise(resolve => setTimeout(resolve, 100 * attempt))
+    }
+  }
+}
+
+async function applyRuntimeRole(sql: Sql, role: RuntimeRole): Promise<void> {
   await sql.begin(async (tx) => {
     // Passed as settings, so the name and password are quoted by format(), never spliced.
     await tx`select set_config('wpw.runtime_role', ${role.name}, true), set_config('wpw.runtime_password', ${role.password}, true)`
