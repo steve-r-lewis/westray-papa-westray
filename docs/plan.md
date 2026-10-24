@@ -29,7 +29,7 @@ Report back with <the PR link only | the PR link and one line on …>.
 
 Newest first.
 
-- Slice 1c part 1, accounts: Authentication, Identity, Profile and Authorisation composed with iam-integration's adapters; sign-in, account, security and own profile pages; the platform super admin in Identity; access rules asking Authorisation: this PR
+- Slice 1c part 1, accounts: Authentication, Identity, Profile and Authorisation composed with iam-integration's adapters; sign-in, account, security and own profile pages; the platform super admin in Identity; access rules asking Authorisation: [steve-r-lewis/westray-papa-westray#17](https://github.com/steve-r-lewis/westray-papa-westray/pull/17)
 - Theme Manager `v0.2.2` pinned here: [steve-r-lewis/westray-papa-westray#15](https://github.com/steve-r-lewis/westray-papa-westray/pull/15)
 - Theme Manager `v0.2.2` released, installing from Git without a `prepare` script: [nuxt4-layers/theme-manager#72](https://github.com/nuxt4-layers/theme-manager/pull/72)
 - `rich-text` pinned through a pnpm catalog: [steve-r-lewis/westray-papa-westray#14](https://github.com/steve-r-lewis/westray-papa-westray/pull/14)
@@ -39,7 +39,7 @@ Newest first.
 
 ## In progress
 
-Nothing: slice 1c part 1 is in review (see Done).
+Nothing: slice 1c part 1 is in review ([steve-r-lewis/westray-papa-westray#17](https://github.com/steve-r-lewis/westray-papa-westray/pull/17)).
 
 ## Next
 
