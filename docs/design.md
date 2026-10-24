@@ -56,7 +56,7 @@ Slice 1b composes Publisher `v1.0.0` for everything a visitor reads beyond the s
 | Drawing | The site's own components, with Theme Manager's classes only. Rich text arrives as safe trees and is drawn node by node, never as HTML; `doc:` links follow their document's current address, or are plain text while it is unpublished |
 | Sections | Listed in `data/shell.json`: which types each lists and in which order (newest first, what is still to come, or by trail stop). The What's on and News dashboard panels show the first few of their section |
 | Seeding | `pnpm db:seed` imports `data/content/` with `importPublisherContent`; `--update` saves a changed file as a new version. The real site starts with its information pages only |
-| Members only | The members' notice has no address and no feed, so nothing serves it until the members' area in slice 1c part 2. A published document's audience cannot be narrowed by a field, because Publisher's listings, feeds and sitemap know nothing of audiences |
+| Members only | The members' notice has no address and no feed, and only the members' area serves it (`/members`, through `server/api/members/notices.get.ts`), to a signed-in member whose account is active. A published document's audience cannot be narrowed by a field, because Publisher's listings, feeds and sitemap know nothing of audiences |
 
 The leak tests seed drafts, scheduled and archived documents, a newer draft of a published article and a members' notice, each with a canary string, and prove that no anonymous answer ever shows one.
 
@@ -79,7 +79,7 @@ Slice 1c part 1 composes the IAM suite: Authentication `v1.0.0`, Identity `v1.0.
 | Events and upkeep | Each member's outbox is relayed to the others through iam-integration's handlers (an empty Profile record on `identity.provisioned`, roles kept in step with owners and memberships), and each member's maintenance runs, as Nitro tasks every minute and every ten minutes: Vercel Cron in production. Access never waits for them |
 | Email | Authentication's messages and Profile's codes, in the shell's words, sent by SMTP, or written to a directory on a developer's machine and in the tests |
 
-Part 2 adds editing and publishing on the site (roles in the platform group, and the super admin's own sign-in) and the members' area, where members' notices are served.
+Part 2 adds the members' area, where members' notices are served to signed-in members. Editing and publishing on the site belong to the content-editor layer, composed through Publisher's editor slot once it is built, with the roles that grant them and the site's facts' administration.
 
 ## Themes
 

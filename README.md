@@ -8,13 +8,14 @@
 
 ## Status
 
-**Slice 1c part 1 built:** on top of slice 1a's shell, themes and migration runner and slice 1b's facts and content, people can create an account, sign in with a second step, and see and change their account, security and own profile, through the IAM suite (Authentication, Identity, Profile and Authorisation). Editing and publishing on the site, and the members' area, follow in part 2.
+**Slice 1c part 1 built:** on top of slice 1a's shell, themes and migration runner and slice 1b's facts and content, people can create an account, sign in with a second step, and see and change their account, security and own profile, through the IAM suite (Authentication, Identity, Profile and Authorisation). Part 2 adds the members' area: the members' notices, for signed-in members only. Editing on the site waits for the content-editor layer.
 
 | Part | State |
 |---|---|
 | Home page | A panelled dashboard, after the mock-up: a panel for each section and for the noticeboard, photo of the week and poll. The What's on and News panels list the next events and the newest news from Publisher; the rest say what is coming until their slice fills them |
 | Header and footer | The header links to the sections and holds Appearance (palette and colour mode) and Sign in, or Account once signed in; every label and link is read from [`data/shell.json`](data/shell.json); responsive from phone to desktop |
-| Side menu | For signed-in members, once their second step is done: their account, profile and security |
+| Side menu | For signed-in members, once their second step is done: their account, profile and security, and the members' notices |
+| Members' area | `/members`: the published members' notices, drawn by the site's own components, for signed-in members only (`server/api/members/notices.get.ts`). Nothing serves one to anyone signed out; they have no address and no feed |
 | Accounts | Sign in (password and a second step, or a passkey), create an account (confirmed by email), forgotten and new passwords; the account (its state, groups, pausing and closing it), security (password, authenticator app and backup codes, passkeys, where you are signed in) and the person's own profile (names and contact details, who sees each, how they are shown). Every member signs in with a second step. Drawn by the site's own components from [Authentication](https://github.com/nuxt4-layers/authentication/tree/v1.0.0), [Identity](https://github.com/nuxt4-layers/identity/tree/v1.0.0), [Profile](https://github.com/nuxt4-layers/profile/tree/v1.1.0) and [Authorisation](https://github.com/nuxt4-layers/authorisation/tree/v1.0.0) |
 | Access | Changes to content, themes and the site's settings ask Authorisation, which grants them only through a role in the platform group. Its one member is the platform super admin, who cannot sign in until part 2, so every change is still refused and nothing is edited on the site |
 | Site facts | The name, tagline, locale, default theme, title template, description, social links, the organisation (Westray Digital Access Group) and its contacts come from [Configuration](https://github.com/nuxt4-layers/configuration/tree/v1.2.0), set in `data/configuration.json` |
@@ -175,7 +176,7 @@ pnpm build       # production build into .output/
 
 | Suite | Proves |
 |---|---|
-| `tests/e2e/leaks.test.ts` | Canary leak tests. Drafts, scheduled and archived documents, a published article's newer draft and a members' notice each carry a unique canary string (`tests/fixtures/canaries/`). Anonymous requests to every page, API, feed, sitemap and error response, found by following every link, must never show one, and a hidden document's address must answer exactly as an address that never held anything. Both hold again for a member who has signed up and in, and holds no role |
+| `tests/e2e/leaks.test.ts` | Canary leak tests. Drafts, scheduled and archived documents, a published article's newer draft and a members' notice each carry a unique canary string (`tests/fixtures/canaries/`). Anonymous requests to every page, API, feed, sitemap and error response, found by following every link, must never show one, and a hidden document's address must answer exactly as an address that never held anything. Both hold again for a member who has signed up and in, and holds no role, except that they see the members' notices, in the members' area alone |
 | `tests/e2e/accounts.test.ts` | Accounts: a person signs up, confirms their address from the emailed link, signs in with an authenticator app and changes their profile; then no signed-out request to any account page or IAM API, from a browser that never signed in or one just signed out, shows their address, name or identifiers; and a member with no roles changes no theme, setting, document or group |
 | `tests/e2e/demo.test.ts` | The demonstration deployment: its banner on every page, `noindex` everywhere, a disallowing `robots.txt`, and the invented content listed |
 
@@ -326,6 +327,7 @@ The invented content then stays in your local database; `./scripts/provision.ps1
 | `server/utils/document-types.ts` | The document types registered with Publisher: page, article, blog post, event, workshop, Creative Trail stop, and the members' notice |
 | `server/plugins/iam.ts`, `server/utils/iam.ts` | Composes the IAM suite with iam-integration's adapters: Authentication and Authorisation on `DATABASE_URL`'s pool, Identity and Profile on the runtime role's; the platform from the `platform` table; the outbox relays and maintenance, run every minute and every ten minutes as Nitro tasks (`server/tasks/iam/`), Vercel Cron in production |
 | `server/utils/permissions.ts` | Authorisation's catalogue: Identity's, Profile's, Configuration's, Publisher's (`publisher.<type>:<action>`) and Theme Manager's (`themes:<action>`, all `high`) permissions |
+| `server/api/members/`, `app/pages/members.vue` | The members' area: the members' notices, for signed-in members only |
 | `server/utils/mail.ts` | The site's email: Authentication's messages and Profile's codes, in the shell's words, by SMTP or to a directory |
 | `server/database/seed-platform.ts`, `server/database/runtime-role.ts` | Provisioning the platform in Identity, and the runtime role |
 | `server/plugins/publisher.ts` | Connects Publisher to the `pg` pool, one site (`westray`), the signed-in person, and access decisions that ask Authorisation, on the platform group (`server/utils/publisher-access.ts`). Publisher's own HTTP API is off |

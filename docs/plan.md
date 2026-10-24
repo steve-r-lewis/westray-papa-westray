@@ -29,6 +29,7 @@ Report back with <the PR link only | the PR link and one line on …>.
 
 Newest first.
 
+- Slice 1c part 2, the members' area: members' notices for signed-in members, nothing for anyone signed out; the canary leak tests for a signed-in member with no roles. Editing moves to content-editor: this PR
 - Slice 1c part 1, accounts: Authentication, Identity, Profile and Authorisation composed with iam-integration's adapters; sign-in, account, security and own profile pages; the platform super admin in Identity; access rules asking Authorisation: [steve-r-lewis/westray-papa-westray#17](https://github.com/steve-r-lewis/westray-papa-westray/pull/17)
 - Theme Manager `v0.2.2` pinned here: [steve-r-lewis/westray-papa-westray#15](https://github.com/steve-r-lewis/westray-papa-westray/pull/15)
 - Theme Manager `v0.2.2` released, installing from Git without a `prepare` script: [nuxt4-layers/theme-manager#72](https://github.com/nuxt4-layers/theme-manager/pull/72)
@@ -39,16 +40,16 @@ Newest first.
 
 ## In progress
 
-Nothing: slice 1c part 1 is in review ([steve-r-lewis/westray-papa-westray#17](https://github.com/steve-r-lewis/westray-papa-westray/pull/17)).
+Nothing: slice 1c part 2 is in review (see Done).
 
 ## Next
 
 In order:
 
-1. Slice 1c part 2: editing and publishing on the site, and the members' area. Includes the platform super admin's own sign-in (Identity holds them, but no Authentication account yet), the roles that grant the site's own permissions (`server/utils/permissions.ts`), Configuration's administration pages, and serving members' notices to members.
-2. A design note on contact and group responsibility, before slice 2: an enquiry capability and a contact form; creating, claiming and transferring groups; routing enquiries to a group without exposing anyone's personal address (see the design's [Contact](design.md#contact)).
-3. Theme Manager 1.0's design, from the design's [proposals](design.md#themes), in its own repository.
-4. The logo as a themed SVG, from the owner's Inkscape drawing.
+1. A design note on contact and group responsibility, before slice 2: an enquiry capability and a contact form; creating, claiming and transferring groups; routing enquiries to a group without exposing anyone's personal address (see the design's [Contact](design.md#contact)).
+2. Theme Manager 1.0's design, from the design's [proposals](design.md#themes), in its own repository.
+3. The logo as a themed SVG, from the owner's Inkscape drawing.
+4. content-editor: design, build and release the editing layer, then compose it through Publisher's editor slot. Editing and publishing on the site, previews, roles that grant them, the super admin's own sign-in and the site's facts' administration come with it.
 5. Slice 2: Community (clubs, committees, organisations, businesses) and each group's administration.
 6. Slice 3: the noticeboard, members' posts with moderation.
 7. Slice 4: group themes and the person's choice, on Theme Manager 1.0.
@@ -75,6 +76,8 @@ Later work must not undo these without a decision of its own.
 - Every member signs in with a second step (Authentication's default); a member's side menu appears only once it is done.
 - Identity issues every identifier: `PLATFORM_SUPER_ADMIN_ID` names the provisioning request, and the `platform` table records what Identity issued. Never write to a layer's schema directly.
 - Identity and Profile serve requests as a runtime role that owns nothing and cannot bypass row-level security (`DATABASE_RUNTIME_URL`).
+- Editing belongs to `nuxt4-layers/content-editor`, composed through Publisher's editor slot; the site builds no editor of its own.
+- Members' notices are served only to signed-in members, by the site's own endpoint; they never get an address or a feed.
 - Signing in grants nothing: every change to content, themes and settings asks Authorisation, and the canary leak tests pass for a signed-in member with no roles as well as anonymously.
 
 ## Elsewhere
