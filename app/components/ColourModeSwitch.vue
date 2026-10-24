@@ -15,7 +15,7 @@ const options = computed(() => [
   <div
     role="group"
     :aria-label="shell.labels.colourMode"
-    class="flex rounded-control border border-edge-input-default bg-fill-input-default p-0.5"
+    class="grid grid-cols-3 rounded-control border border-edge-input-default bg-fill-input-default p-0.5"
   >
     <button
       v-for="option in options"
@@ -23,11 +23,11 @@ const options = computed(() => [
       type="button"
       :aria-pressed="preference === option.mode"
       :title="option.label"
-      class="flex items-center gap-1 rounded-control px-2 py-1 text-sm text-pen-input-default hover:bg-fill-input-hover hover:text-pen-input-hover aria-pressed:bg-fill-input-selected aria-pressed:text-pen-input-selected aria-pressed:font-semibold"
+      class="flex items-center justify-center gap-1 rounded-control px-2 py-1 text-sm text-pen-input-default hover:bg-fill-input-hover hover:text-pen-input-hover aria-pressed:bg-fill-input-selected aria-pressed:text-pen-input-selected aria-pressed:font-semibold"
       @click="preference = option.mode"
     >
       <AppIcon :name="option.icon" :size="18" />
-      <span class="sr-only 2xl:not-sr-only">{{ option.label }}</span>
+      <span>{{ option.label }}</span>
     </button>
   </div>
 </template>
