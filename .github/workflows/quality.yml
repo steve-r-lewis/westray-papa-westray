@@ -40,6 +40,7 @@ jobs:
           --health-retries 10
     env:
       DATABASE_URL: postgres://westray-papa-westray:westray-papa-westray@postgres:5432/westray-papa-westray
+      PLATFORM_SUPER_ADMIN_ID: 00000000-0000-4000-8000-000000000001
       COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -54,8 +55,10 @@ jobs:
         run: pnpm typecheck
       - name: Test
         run: pnpm test
-      - name: Migrate
-        run: pnpm db:migrate
+      - name: Migrate and seed
+        run: |
+          pnpm db:migrate
+          pnpm db:seed
       - name: Build
         run: pnpm build
 

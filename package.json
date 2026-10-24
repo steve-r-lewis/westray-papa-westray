@@ -15,11 +15,16 @@
     "test": "vitest run",
     "db:up": "docker compose up -d postgres",
     "db:down": "docker compose down",
-    "db:migrate": "node scripts/migrate.ts"
+    "db:migrate": "node scripts/migrate.ts",
+    "db:seed": "tsx scripts/seed.ts",
+    "themes:generate": "tsx scripts/themes/generate.ts"
   },
   "dependencies": {
+    "@nuxt4-layers/theme-manager": "github:nuxt4-layers/theme-manager#e63274dd0fa8801090252e7f07ecfa4145a3ea6b",
+    "@tailwindcss/vite": "^4.3.3",
     "nuxt": "^4.6.2",
     "postgres": "^3.4.9",
+    "tailwindcss": "^4.3.3",
     "vue": "^3.5.44",
     "vue-router": "^5.4.0",
     "zod": "^4.6.7"
@@ -28,6 +33,7 @@
     "@nuxt/test-utils": "^4.3.4",
     "@vue/test-utils": "^2.5.1",
     "happy-dom": "^21.0.4",
+    "tsx": "^4.23.15",
     "typescript": "^5.9.3",
     "vitest": "^5.0.5",
     "vue-tsc": "^3.3.13"

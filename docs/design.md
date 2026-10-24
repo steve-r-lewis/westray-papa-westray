@@ -37,6 +37,17 @@ Document types (article, blog post, event, workshop, trail stop, group page, not
 
 The mock-up's seasonal palettes become Theme Manager themes; light, dark and system are the person's preference. Every theme must pass Theme Manager's contrast checks before it is published: the mock-up's light-green text on pale green does not.
 
+Done in slice 1a, on Theme Manager `v0.2.1`:
+
+| Part | How |
+|---|---|
+| Palettes | Spring, Summer, Autumn and Winter, generated from Theme Manager's default palette: the page-layer and purpose roles take the season's hue, status roles keep theirs, and every Pen/Fill pair reaches 4.5:1 and every Edge/Fill pair and focus ring 3:1 in light and dark |
+| Ownership | Seeded as the platform super admin's themes (`ownerType: user`), published and `public`. Theme Manager accepts `shared` but gives it no meaning, so `public` is what offers them to everyone |
+| Storage | A `themes` table holding the canonical Theme JSON, behind Theme Manager's repository port |
+| Access | Until Authorisation is composed, anyone may read and use public themes and every change is refused. Theme Manager's management pages are not exposed |
+| Choosing | A palette picker and a System, Light and Dark switch in the header. A visitor gets a cookie only by choosing; until then the site's default theme (Spring) applies |
+| Members | The side menu is for signed-in members only; the public site map is in the footer |
+
 Theme Manager 1.0 adds what groups need. These are proposals for its contract:
 
 | Need | Proposal |

@@ -2,9 +2,24 @@
   "site": {
     "name": "Westray Online",
     "tagline": "Two Islands, One Community, Many Voices",
-    "nameLines": ["Westray and", "Papa Westray"],
+    "nameLines": [
+      "Westray and",
+      "Papa Westray"
+    ],
     "locale": "en-GB",
-    "logo": { "src": "/images/logo.png", "alt": "" }
+    "logo": {
+      "src": "/images/logo.png",
+      "alt": ""
+    }
+  },
+  "themes": {
+    "default": "westray-spring",
+    "order": [
+      "westray-spring",
+      "westray-summer",
+      "westray-autumn",
+      "westray-winter"
+    ]
   },
   "labels": {
     "skipToContent": "Skip to content",
@@ -15,6 +30,13 @@
     "footerNavigation": "Footer",
     "share": "Share",
     "linkCopied": "Link copied",
+    "siteMap": "Site map",
+    "social": "Elsewhere",
+    "theme": "Palette",
+    "colourMode": "Colour mode",
+    "modeSystem": "System",
+    "modeLight": "Light",
+    "modeDark": "Dark",
     "comingSoonTitle": "Coming soon",
     "comingSoonBody": "This part of the site is not built yet. It will appear here when it is ready.",
     "notFoundTitle": "Page not found",
@@ -25,53 +47,153 @@
   },
   "header": {
     "links": [
-      { "label": "Home", "to": "/" },
-      { "label": "Marketplace", "to": "/market" },
-      { "label": "Shopping", "to": "/shop" },
-      { "label": "Events", "to": "/events" }
+      {
+        "label": "Home",
+        "to": "/"
+      },
+      {
+        "label": "Marketplace",
+        "to": "/market"
+      },
+      {
+        "label": "Shopping",
+        "to": "/shop"
+      },
+      {
+        "label": "Events",
+        "to": "/events"
+      }
     ],
-    "signIn": { "label": "Sign in", "to": "/sign-in" }
+    "signIn": {
+      "label": "Sign in",
+      "to": "/sign-in",
+      "icon": "sign-in"
+    }
   },
-  "menu": {
+  "navigation": {
     "groups": [
       {
         "label": "Information",
         "items": [
-          { "label": "Home", "to": "/" },
-          { "label": "About", "to": "/about" },
-          { "label": "Policies", "to": "/policies" },
-          { "label": "Contact", "to": "/contact" }
+          {
+            "label": "Home",
+            "to": "/",
+            "icon": "home"
+          },
+          {
+            "label": "About",
+            "to": "/about",
+            "icon": "info"
+          },
+          {
+            "label": "Policies",
+            "to": "/policies",
+            "icon": "policy"
+          },
+          {
+            "label": "Contact",
+            "to": "/contact",
+            "icon": "mail"
+          }
         ]
       },
       {
         "label": "News",
         "items": [
-          { "label": "Articles", "to": "/articles" },
-          { "label": "Blog", "to": "/blog" }
+          {
+            "label": "Articles",
+            "to": "/articles",
+            "icon": "article"
+          },
+          {
+            "label": "Blog",
+            "to": "/blog",
+            "icon": "blog"
+          }
         ]
       },
       {
         "label": "What's on",
         "items": [
-          { "label": "Events", "to": "/events" },
-          { "label": "Workshops", "to": "/workshops" },
-          { "label": "Creative Trail", "to": "/creative-trail" }
+          {
+            "label": "Events",
+            "to": "/events",
+            "icon": "calendar"
+          },
+          {
+            "label": "Workshops",
+            "to": "/workshops",
+            "icon": "workshop"
+          },
+          {
+            "label": "Creative Trail",
+            "to": "/creative-trail",
+            "icon": "trail"
+          }
         ]
       },
       {
         "label": "Community",
         "items": [
-          { "label": "Clubs", "to": "/clubs" },
-          { "label": "Committees", "to": "/committees" },
-          { "label": "Organisations", "to": "/organisations" },
-          { "label": "Businesses", "to": "/businesses" }
+          {
+            "label": "Clubs",
+            "to": "/clubs",
+            "icon": "users"
+          },
+          {
+            "label": "Committees",
+            "to": "/committees",
+            "icon": "committee"
+          },
+          {
+            "label": "Organisations",
+            "to": "/organisations",
+            "icon": "organisation"
+          },
+          {
+            "label": "Businesses",
+            "to": "/businesses",
+            "icon": "business"
+          }
         ]
       },
       {
         "label": "Market",
         "items": [
-          { "label": "Market", "to": "/market" },
-          { "label": "Shop", "to": "/shop" }
+          {
+            "label": "Market",
+            "to": "/market",
+            "icon": "market"
+          },
+          {
+            "label": "Shop",
+            "to": "/shop",
+            "icon": "shop"
+          }
+        ]
+      }
+    ]
+  },
+  "menu": {
+    "groups": [
+      {
+        "label": "My account",
+        "items": [
+          {
+            "label": "Account",
+            "to": "/account",
+            "icon": "account"
+          },
+          {
+            "label": "Profile",
+            "to": "/account/profile",
+            "icon": "profile"
+          },
+          {
+            "label": "Security",
+            "to": "/account/security",
+            "icon": "security"
+          }
         ]
       }
     ],
@@ -79,16 +201,33 @@
       {
         "label": "Buy me a Coffee",
         "description": "Help me keep this site alive",
-        "to": "https://buymeacoffee.com/stevelewis"
+        "to": "https://buymeacoffee.com/stevelewis",
+        "icon": "coffee"
       }
     ]
   },
   "footer": {
     "copyright": "© 2025–2026 Westray Online. All rights reserved.",
     "links": [
-      { "label": "About", "to": "/about" },
-      { "label": "Contact", "to": "/contact" },
-      { "label": "Policies", "to": "/policies" }
+      {
+        "label": "About",
+        "to": "/about"
+      },
+      {
+        "label": "Contact",
+        "to": "/contact"
+      },
+      {
+        "label": "Policies",
+        "to": "/policies"
+      }
+    ],
+    "social": [
+      {
+        "label": "Source code on GitHub",
+        "to": "https://github.com/steve-r-lewis/westray-papa-westray",
+        "icon": "github"
+      }
     ]
   },
   "home": {
@@ -96,25 +235,88 @@
     "heading": "Welcome to Westray's Digital Commons",
     "intro": "Shop local, connect with neighbours, and keep the community spirit alive.",
     "actions": [
-      { "label": "Join the Marketplace", "to": "/market" },
-      { "label": "See Community Events", "to": "/events" }
+      {
+        "label": "Join the Marketplace",
+        "to": "/market"
+      },
+      {
+        "label": "See Community Events",
+        "to": "/events"
+      }
     ]
   },
   "comingSoon": [
-    { "path": "/about", "title": "About" },
-    { "path": "/policies", "title": "Policies" },
-    { "path": "/contact", "title": "Contact" },
-    { "path": "/articles", "title": "Articles" },
-    { "path": "/blog", "title": "Blog" },
-    { "path": "/events", "title": "Events" },
-    { "path": "/workshops", "title": "Workshops" },
-    { "path": "/creative-trail", "title": "Creative Trail" },
-    { "path": "/clubs", "title": "Clubs" },
-    { "path": "/committees", "title": "Committees" },
-    { "path": "/organisations", "title": "Organisations" },
-    { "path": "/businesses", "title": "Businesses" },
-    { "path": "/market", "title": "Market" },
-    { "path": "/shop", "title": "Shop" },
-    { "path": "/sign-in", "title": "Sign in" }
+    {
+      "path": "/about",
+      "title": "About"
+    },
+    {
+      "path": "/policies",
+      "title": "Policies"
+    },
+    {
+      "path": "/contact",
+      "title": "Contact"
+    },
+    {
+      "path": "/articles",
+      "title": "Articles"
+    },
+    {
+      "path": "/blog",
+      "title": "Blog"
+    },
+    {
+      "path": "/events",
+      "title": "Events"
+    },
+    {
+      "path": "/workshops",
+      "title": "Workshops"
+    },
+    {
+      "path": "/creative-trail",
+      "title": "Creative Trail"
+    },
+    {
+      "path": "/clubs",
+      "title": "Clubs"
+    },
+    {
+      "path": "/committees",
+      "title": "Committees"
+    },
+    {
+      "path": "/organisations",
+      "title": "Organisations"
+    },
+    {
+      "path": "/businesses",
+      "title": "Businesses"
+    },
+    {
+      "path": "/market",
+      "title": "Market"
+    },
+    {
+      "path": "/shop",
+      "title": "Shop"
+    },
+    {
+      "path": "/sign-in",
+      "title": "Sign in"
+    },
+    {
+      "path": "/account",
+      "title": "Account"
+    },
+    {
+      "path": "/account/profile",
+      "title": "Profile"
+    },
+    {
+      "path": "/account/security",
+      "title": "Security"
+    }
   ]
 }
