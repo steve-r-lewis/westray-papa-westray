@@ -318,6 +318,11 @@
       }
     }
   },
+  "members": {
+    "title": "Members' notices",
+    "intro": "Notices for members of the site only: nobody signed out sees them.",
+    "empty": "There are no notices yet."
+  },
   "menu": {
     "groups": [
       {
@@ -337,6 +342,16 @@
             "label": "Security",
             "to": "/account/security",
             "icon": "security"
+          }
+        ]
+      },
+      {
+        "label": "Members",
+        "items": [
+          {
+            "label": "Notices",
+            "to": "/members",
+            "icon": "noticeboard"
           }
         ]
       }
