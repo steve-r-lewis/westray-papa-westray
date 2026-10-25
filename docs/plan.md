@@ -32,6 +32,12 @@ Report back with <the PR link only | the PR link and one line on …>.
 
 Newest first.
 
+- Plan updated with the design notes below: this PR
+- Gallery's design: albums and photo of the week as Publisher types over media's images; group editors moderate members' submissions; people publish their own albums: [nuxt4-layers/gallery#1](https://github.com/nuxt4-layers/gallery/pull/1)
+- Media's design: web-ready, group-owned images, private originals, allowances by entitlement, reporting and takedown, members-only images served through the site: [nuxt4-layers/media#1](https://github.com/nuxt4-layers/media/pull/1), [#2](https://github.com/nuxt4-layers/media/pull/2) and [#3](https://github.com/nuxt4-layers/media/pull/3)
+- content-editor's design: Publisher's functions passed by the host, a formatted editor saving safe trees, forms from each type, images from media: [nuxt4-layers/content-editor#1](https://github.com/nuxt4-layers/content-editor/pull/1)
+- One-page host contracts (`CONTRACT.md`): the IAM suite [nuxt4-layers/iam-integration#25](https://github.com/nuxt4-layers/iam-integration/pull/25), Publisher [nuxt4-layers/publisher#11](https://github.com/nuxt4-layers/publisher/pull/11), Configuration [nuxt4-layers/configuration#11](https://github.com/nuxt4-layers/configuration/pull/11), Theme Manager [nuxt4-layers/theme-manager#74](https://github.com/nuxt4-layers/theme-manager/pull/74)
+- ADR-0012 accepted, with `CONTRACT.md`'s limit raised to 200 lines: [nuxt4-layers/platform-architecture#26](https://github.com/nuxt4-layers/platform-architecture/pull/26)
 - Architecture in plain English, describing what exists before the design discussion: this PR
 - Slice 1c part 2, the members' area: members' notices for signed-in members, nothing for anyone signed out; the canary leak tests for a signed-in member with no roles. Editing moves to content-editor: this PR
 - Slice 1c part 1, accounts: Authentication, Identity, Profile and Authorisation composed with iam-integration's adapters; sign-in, account, security and own profile pages; the platform super admin in Identity; access rules asking Authorisation: [steve-r-lewis/westray-papa-westray#17](https://github.com/steve-r-lewis/westray-papa-westray/pull/17)
@@ -44,14 +50,14 @@ Newest first.
 
 ## In progress
 
-Nothing: slice 1c part 2 is in review (see Done).
+Nothing.
 
 ## Next
 
 In order:
 
-1. One-page host contracts (`CONTRACT.md`, [ADR-0012](https://github.com/nuxt4-layers/platform-architecture/blob/2888d9be31974a1b681a77b700ce9edcea0c6463/docs/decisions/ADR-0012-trivial-composition.md) §6), docs only, one PR per layer: the IAM suite in iam-integration first, then Publisher, Configuration and Theme Manager. Handovers paste these instead of reading layers.
-2. content-editor: design, build and release the editing layer (its own screens, as amended ADR-0009 allows), then compose it through Publisher's editor slot. Editing and publishing on the site, previews and the roles that grant them come with it.
+1. Media: the owner confirms a Vercel Blob store can be held in London; then build and release media to its [design](https://github.com/nuxt4-layers/media/blob/4d76598b1ef6e86419f0520f927cf85f3a51bfb1/docs/design.md): the core (direct uploads, processing, allowances, private serving, reporting), its screens (picker, library, reports), `examples/minimal-host` and `CONTRACT.md`.
+2. content-editor: its design gains moderation screens for Publisher's queue (the gallery needs them); then build and release it on media, and compose both through Publisher's editor slot. Editing and publishing on the site, previews, images and the roles that grant them come with it.
 3. Adopt ADR-0012, one layer per chat: Theme Manager, Publisher, iam-integration with the IAM suite, Configuration; after each, a small Westray-Papa-Westray chat deletes the wiring it replaces.
 4. Westray-Papa-Westray uses the IAM layers' own screens (sign-in, account, security, profile, groups, access) and deletes its own account pages.
 5. People who run the site: the super admin's passkey sign-in from an operator script's one-time link; invitations to the platform group, accepted, then a role; the site's facts' administration.
@@ -62,7 +68,7 @@ In order:
 10. The logo as a themed SVG, from the owner's Inkscape drawing.
 11. Slice 3: the noticeboard, members' posts with moderation.
 12. Slice 4: group themes and the person's choice, on Theme Manager 1.0.
-13. Slice 5: social feed, polls and photo of the week, on new capabilities.
+13. Slice 5: the gallery, to its [design](https://github.com/nuxt4-layers/gallery/blob/8751fc168b7a7104442f52e9a25e6e796dbddf2e/docs/design.md) (public and members' albums, members' submissions moderated by group editors, people's own albums, photo of the week); social feed and polls on new capabilities.
 14. Slice 6: market and shops, on new product, order and payment capabilities, with subscriptions and entitlements (discount codes, such as always free for islanders, granted by code or invitation).
 15. Slice 7: workshop booking, on a new booking capability.
 
@@ -92,6 +98,10 @@ Later work must not undo these without a decision of its own.
 - Roles on the site, the super admin's included, come by invitation, acceptance, then the role. Two owners are recommended for every group and the platform, not required; Identity's recovery and break-glass cover a lone owner.
 - Groups are self-service: members create them under a platform-owned Community group and own them at once, with logging and reporting after the fact rather than approval before.
 - Payments, subscriptions and exceptions such as always free for islanders are entitlements, granted by discount code or invitation, from capabilities still to be built.
+- Images come from `nuxt4-layers/media`: owned by a group, made web-ready on upload, stripped of location and every other metadata, with alt text required and the uploader always recorded. Originals are kept only where a group's entitlement allows, and never public. Members-only images are served through the site with an access check.
+- Uploaders confirm a parent's or guardian's consent for anyone identifiable under 18, and credit any image they did not take. Every public image can be reported and taken down from media's first release.
+- Each group has 100 MB of free storage (25 MB uploads where originals are kept); more comes by entitlement. Over the allowance, uploads are refused and nothing is deleted. Files stay in the UK: the Vercel Blob store's region is confirmed before use.
+- The gallery owns no data: albums are Publisher types over media's images. Group editors moderate members' submissions; people with their own accounts publish their own albums and are responsible for them.
 - Signing in grants nothing: every change to content, themes and settings asks Authorisation, and the canary leak tests pass for a signed-in member with no roles as well as anonymously.
 
 ## Elsewhere
