@@ -50,16 +50,21 @@ Nothing: slice 1c part 2 is in review (see Done).
 
 In order:
 
-1. A design note on contact and group responsibility, before slice 2: an enquiry capability and a contact form; creating, claiming and transferring groups; routing enquiries to a group without exposing anyone's personal address (see the design's [Contact](design.md#contact)).
-2. Theme Manager 1.0's design, from the design's [proposals](design.md#themes), in its own repository.
-3. The logo as a themed SVG, from the owner's Inkscape drawing.
-4. content-editor: design, build and release the editing layer, then compose it through Publisher's editor slot. Editing and publishing on the site, previews, roles that grant them, the super admin's own sign-in and the site's facts' administration come with it.
-5. Slice 2: Community (clubs, committees, organisations, businesses) and each group's administration.
-6. Slice 3: the noticeboard, members' posts with moderation.
-7. Slice 4: group themes and the person's choice, on Theme Manager 1.0.
-8. Slice 5: social feed, polls and photo of the week, on new capabilities.
-9. Slice 6: market and shops, on new product, order and payment capabilities.
-10. Slice 7: workshop booking, on a new booking capability.
+1. One-page host contracts (`CONTRACT.md`, [ADR-0012](https://github.com/nuxt4-layers/platform-architecture/blob/2888d9be31974a1b681a77b700ce9edcea0c6463/docs/decisions/ADR-0012-trivial-composition.md) §6), docs only, one PR per layer: the IAM suite in iam-integration first, then Publisher, Configuration and Theme Manager. Handovers paste these instead of reading layers.
+2. content-editor: design, build and release the editing layer (its own screens, as amended ADR-0009 allows), then compose it through Publisher's editor slot. Editing and publishing on the site, previews and the roles that grant them come with it.
+3. Adopt ADR-0012, one layer per chat: Theme Manager, Publisher, iam-integration with the IAM suite, Configuration; after each, a small Westray chat deletes the wiring it replaces.
+4. Westray uses the IAM layers' own screens (sign-in, account, security, profile, groups, access) and deletes its own account pages.
+5. People who run the site: the super admin's passkey sign-in from an operator script's one-time link; invitations to the platform group, accepted, then a role; the site's facts' administration.
+6. A design note on contact and groups, before slice 2: self-service groups, claiming and transferring, an enquiry capability and contact form, routing enquiries without exposing personal addresses (see the design's [Contact](design.md#contact)).
+7. Slice 2: Community (clubs, committees, organisations, businesses) and each group's administration.
+8. Logging and reporting: an audit capability collecting every layer's events, with reports over it.
+9. Theme Manager 1.0's design, from the design's [proposals](design.md#themes), in its own repository.
+10. The logo as a themed SVG, from the owner's Inkscape drawing.
+11. Slice 3: the noticeboard, members' posts with moderation.
+12. Slice 4: group themes and the person's choice, on Theme Manager 1.0.
+13. Slice 5: social feed, polls and photo of the week, on new capabilities.
+14. Slice 6: market and shops, on new product, order and payment capabilities, with subscriptions and entitlements (discount codes, such as always free for islanders, granted by code or invitation).
+15. Slice 7: workshop booking, on a new booking capability.
 
 ## Decisions to remember
 
@@ -82,6 +87,11 @@ Later work must not undo these without a decision of its own.
 - Identity and Profile serve requests as a runtime role that owns nothing and cannot bypass row-level security (`DATABASE_RUNTIME_URL`).
 - Editing belongs to `nuxt4-layers/content-editor`, composed through Publisher's editor slot; the site builds no editor of its own.
 - Members' notices are served only to signed-in members, by the site's own endpoint; they never get an address or a feed.
+- Standard screens come from the layers' own optional presentation parts (amended ADR-0009); Westray draws only its own screens. Composition follows ADR-0012: one call per layer, defaults for every other port, and a one-page `CONTRACT.md` pasted into handovers.
+- A second step is non-negotiable for everyone. Passkeys are the preferred sign-in, including from a phone for a computer; an authenticator app's code is the fallback; no push-approval prompts. The super admin and site administrators sign in with a passkey.
+- Roles on the site, the super admin's included, come by invitation, acceptance, then the role. Two owners are recommended for every group and the platform, not required; Identity's recovery and break-glass cover a lone owner.
+- Groups are self-service: members create them under a platform-owned Community group and own them at once, with logging and reporting after the fact rather than approval before.
+- Payments, subscriptions and exceptions such as always free for islanders are entitlements, granted by discount code or invitation, from capabilities still to be built.
 - Signing in grants nothing: every change to content, themes and settings asks Authorisation, and the canary leak tests pass for a signed-in member with no roles as well as anonymously.
 
 ## Elsewhere
