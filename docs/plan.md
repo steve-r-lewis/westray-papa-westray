@@ -52,8 +52,8 @@ In order:
 
 1. One-page host contracts (`CONTRACT.md`, [ADR-0012](https://github.com/nuxt4-layers/platform-architecture/blob/2888d9be31974a1b681a77b700ce9edcea0c6463/docs/decisions/ADR-0012-trivial-composition.md) §6), docs only, one PR per layer: the IAM suite in iam-integration first, then Publisher, Configuration and Theme Manager. Handovers paste these instead of reading layers.
 2. content-editor: design, build and release the editing layer (its own screens, as amended ADR-0009 allows), then compose it through Publisher's editor slot. Editing and publishing on the site, previews and the roles that grant them come with it.
-3. Adopt ADR-0012, one layer per chat: Theme Manager, Publisher, iam-integration with the IAM suite, Configuration; after each, a small Westray chat deletes the wiring it replaces.
-4. Westray uses the IAM layers' own screens (sign-in, account, security, profile, groups, access) and deletes its own account pages.
+3. Adopt ADR-0012, one layer per chat: Theme Manager, Publisher, iam-integration with the IAM suite, Configuration; after each, a small Westray-Papa-Westray chat deletes the wiring it replaces.
+4. Westray-Papa-Westray uses the IAM layers' own screens (sign-in, account, security, profile, groups, access) and deletes its own account pages.
 5. People who run the site: the super admin's passkey sign-in from an operator script's one-time link; invitations to the platform group, accepted, then a role; the site's facts' administration.
 6. A design note on contact and groups, before slice 2: self-service groups, claiming and transferring, an enquiry capability and contact form, routing enquiries without exposing personal addresses (see the design's [Contact](design.md#contact)).
 7. Slice 2: Community (clubs, committees, organisations, businesses) and each group's administration.
@@ -87,7 +87,7 @@ Later work must not undo these without a decision of its own.
 - Identity and Profile serve requests as a runtime role that owns nothing and cannot bypass row-level security (`DATABASE_RUNTIME_URL`).
 - Editing belongs to `nuxt4-layers/content-editor`, composed through Publisher's editor slot; the site builds no editor of its own.
 - Members' notices are served only to signed-in members, by the site's own endpoint; they never get an address or a feed.
-- Standard screens come from the layers' own optional presentation parts (amended ADR-0009); Westray draws only its own screens. Composition follows ADR-0012: one call per layer, defaults for every other port, and a one-page `CONTRACT.md` pasted into handovers.
+- Standard screens come from the layers' own optional presentation parts (amended ADR-0009); Westray-Papa-Westray draws only its own screens. Composition follows ADR-0012: one call per layer, defaults for every other port, and a one-page `CONTRACT.md` pasted into handovers.
 - A second step is non-negotiable for everyone. Passkeys are the preferred sign-in, including from a phone for a computer; an authenticator app's code is the fallback; no push-approval prompts. The super admin and site administrators sign in with a passkey.
 - Roles on the site, the super admin's included, come by invitation, acceptance, then the role. Two owners are recommended for every group and the platform, not required; Identity's recovery and break-glass cover a lone owner.
 - Groups are self-service: members create them under a platform-owned Community group and own them at once, with logging and reporting after the fact rather than approval before.
